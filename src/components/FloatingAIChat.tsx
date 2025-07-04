@@ -107,7 +107,7 @@ const FloatingAIChat = () => {
   return <>
       {/* Floating Button */}
       <div className="fixed bottom-6 right-6 z-50">
-        {!isOpen && <Button onClick={() => setIsOpen(true)} size="icon" className="w-16 h-16 rounded-full bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 shadow-lg hover:shadow-xl transition-all animate-pulse text-yellow-200 bg-zinc-700 hover:bg-zinc-600">
+        {!isOpen && <Button onClick={() => setIsOpen(true)} size="icon" className="w-16 h-16 rounded-full bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 shadow-lg hover:shadow-xl transition-all text-yellow-200 bg-zinc-700 hover:bg-zinc-600">
             <MessageSquare className="w-8 h-8" />
           </Button>}
       </div>
@@ -117,7 +117,7 @@ const FloatingAIChat = () => {
           <CardHeader className="bg-gradient-to-r from-primary to-secondary text-primary-foreground rounded-t-lg">
             <div className="flex items-center justify-between">
               <CardTitle className="flex items-center gap-2">
-                <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+                <div className="w-3 h-3 bg-green-400 rounded-full"></div>
                 AI Assistant
               </CardTitle>
               <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)} className="text-primary-foreground hover:bg-primary-foreground/20">

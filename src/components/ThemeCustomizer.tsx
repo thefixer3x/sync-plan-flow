@@ -122,7 +122,7 @@ const ThemeCustomizer = () => {
                   {theme.name}
                 </CardTitle>
                 {currentTheme === theme.id && (
-                  <Badge className="animate-pulse-glow">Active</Badge>
+                  <Badge>Active</Badge>
                 )}
               </div>
               <CardDescription>{theme.description}</CardDescription>

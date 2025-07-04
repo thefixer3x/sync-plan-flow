@@ -96,7 +96,7 @@ const Index = () => {
                 <div className="space-y-3 text-sm">
                   <div className="flex justify-between items-center p-3 rounded-lg hover:bg-primary/10 transition-all cursor-pointer border border-primary/10">
                     <div className="flex items-center gap-3">
-                      <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                      <div className="w-3 h-3 bg-green-500 rounded-full"></div>
                       <div>
                         <span className="font-medium">Payment Processed</span>
                         <p className="text-xs text-muted-foreground mt-1">Netflix subscription renewed</p>
@@ -106,7 +106,7 @@ const Index = () => {
                   </div>
                   <div className="flex justify-between items-center p-3 rounded-lg hover:bg-primary/10 transition-all cursor-pointer border border-primary/10">
                     <div className="flex items-center gap-3">
-                      <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse"></div>
+                      <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
                       <div>
                         <span className="font-medium">Task Completed</span>
                         <p className="text-xs text-muted-foreground mt-1">Client presentation finished</p>
@@ -116,7 +116,7 @@ const Index = () => {
                   </div>
                   <div className="flex justify-between items-center p-3 rounded-lg hover:bg-primary/10 transition-all cursor-pointer border border-primary/10">
                     <div className="flex items-center gap-3">
-                      <div className="w-3 h-3 bg-yellow-500 rounded-full animate-pulse"></div>
+                      <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
                       <div>
                         <span className="font-medium">Reminder Set</span>
                         <p className="text-xs text-muted-foreground mt-1">Doctor appointment tomorrow</p>
