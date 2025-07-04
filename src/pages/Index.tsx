@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronLeft, ChevronRight, ArrowRight, Circle } from "lucide-react";
+import { ChevronLeft, ChevronRight, ArrowRight, Circle, MessageSquare, Clock, Zap, CheckCircle, Layout, FileText, Folder, Star, TrendingUp, Calendar, Bell, Shield, Lock, Users, Settings } from "lucide-react";
 
 const Index = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -10,82 +10,148 @@ const Index = () => {
       title: "Conversational AI Interface",
       subtitle: "Your Personal Productivity Assistant",
       content: (
-        <div className="space-y-8">
-          <div className="max-w-4xl mx-auto">
-            <div className="bg-muted/30 rounded-lg p-6 mb-8">
-              <h2 className="text-2xl font-bold mb-6 text-center">Chat Interface</h2>
-              <div className="space-y-4">
-                <div className="flex justify-start">
-                  <div className="bg-primary text-primary-foreground rounded-lg px-4 py-2 max-w-xs">
-                    Good morning! I noticed you have 3 urgent tasks and a payment due tomorrow. Should I prioritize these?
+        <div className="space-y-8 animate-fade-in">
+          <div className="text-center mb-12">
+            <h2 className="text-5xl font-bold mb-6 bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent animate-scale-in">
+              Natural Language Interface
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              Your intelligent companion for seamless productivity conversations
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="bg-gradient-to-br from-background via-muted/30 to-primary/5 p-8 rounded-2xl border border-primary/20 shadow-lg hover-scale">
+              <h3 className="text-2xl font-semibold mb-6 flex items-center gap-3">
+                <div className="p-2 bg-primary/10 rounded-lg">
+                  <MessageSquare className="w-6 h-6 text-primary" />
+                </div>
+                Live Chat Interface
+              </h3>
+              
+              <div className="space-y-4 mb-6 max-h-80 overflow-y-auto">
+                <div className="flex justify-start animate-slide-in-left">
+                  <div className="bg-muted/80 backdrop-blur p-4 rounded-xl max-w-sm shadow-sm">
+                    <p className="text-sm">Good morning! I noticed you have 3 urgent tasks and a payment due tomorrow. Should I prioritize these?</p>
+                    <span className="text-xs text-muted-foreground mt-1 block">AI Assistant - Just now</span>
                   </div>
                 </div>
+                
                 <div className="flex justify-end">
-                  <div className="bg-muted rounded-lg px-4 py-2 max-w-xs">
-                    Yes, please show me the payment details first
+                  <div className="bg-gradient-to-r from-primary to-primary/80 text-primary-foreground p-4 rounded-xl max-w-sm shadow-sm">
+                    <p className="text-sm">Yes, please show me the payment details first</p>
+                    <span className="text-xs text-primary-foreground/70 mt-1 block">You - Just now</span>
                   </div>
                 </div>
+                
                 <div className="flex justify-start">
-                  <div className="bg-primary text-primary-foreground rounded-lg px-4 py-2 max-w-xs">
-                    Your electricity bill (£127) is due tomorrow. I can set up auto-pay or remind you at 6 PM today?
+                  <div className="bg-gradient-to-r from-secondary to-secondary/80 text-secondary-foreground p-4 rounded-xl max-w-sm shadow-sm">
+                    <p className="text-sm">Your electricity bill (£127) is due tomorrow. I can set up auto-pay or remind you at 6 PM today?</p>
+                    <span className="text-xs text-secondary-foreground/70 mt-1 block">AI Assistant - Just now</span>
                   </div>
+                </div>
+
+                <div className="flex justify-end">
+                  <div className="bg-gradient-to-r from-accent to-accent/80 text-accent-foreground p-4 rounded-xl max-w-sm shadow-sm">
+                    <p className="text-sm">Set up the reminder for 6 PM, and also remind me about my gym session</p>
+                    <span className="text-xs text-accent-foreground/70 mt-1 block">You - Just now</span>
+                  </div>
+                </div>
+
+                <div className="flex justify-start">
+                  <div className="bg-muted/80 backdrop-blur p-4 rounded-xl max-w-sm shadow-sm border border-green-200">
+                    <p className="text-sm">✅ Done! Reminder set for 6 PM today. I also see you have gym blocked for 7:30 PM - perfect timing after dinner!</p>
+                    <span className="text-xs text-muted-foreground mt-1 block">AI Assistant - Just now</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="border-t pt-4 bg-muted/20 rounded-lg p-4">
+                <div className="flex gap-3">
+                  <input 
+                    type="text" 
+                    placeholder="Type or speak your message..."
+                    className="flex-1 bg-background/80 backdrop-blur border border-border/50 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary/50"
+                  />
+                  <button className="bg-gradient-to-r from-primary to-primary/80 text-primary-foreground px-6 py-3 rounded-lg hover-scale transition-all">
+                    Send
+                  </button>
+                  <button className="bg-gradient-to-r from-secondary to-secondary/80 text-secondary-foreground px-4 py-3 rounded-lg hover-scale transition-all">
+                    🎤
+                  </button>
                 </div>
               </div>
             </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-4">
-                <h3 className="text-xl font-semibold">Recent Events</h3>
-                <div className="space-y-3">
-                  <div className="border border-border p-3 rounded-lg">
-                    <div className="flex items-center gap-2 mb-1">
-                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                      <span className="text-sm font-medium">Payment Processed</span>
-                      <span className="text-xs text-muted-foreground">2 hours ago</span>
+
+            <div className="space-y-6">
+              <div className="bg-gradient-to-br from-primary/10 via-primary/5 to-transparent p-6 rounded-2xl border border-primary/30 shadow-lg animate-fade-in hover-scale">
+                <h4 className="font-semibold mb-4 text-primary flex items-center gap-2">
+                  <Clock className="w-5 h-5" />
+                  Recent Events
+                </h4>
+                <div className="space-y-3 text-sm">
+                  <div className="flex justify-between items-center p-3 rounded-lg hover:bg-primary/10 transition-all cursor-pointer border border-primary/10">
+                    <div className="flex items-center gap-3">
+                      <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                      <div>
+                        <span className="font-medium">Payment Processed</span>
+                        <p className="text-xs text-muted-foreground mt-1">Netflix subscription renewed</p>
+                      </div>
                     </div>
-                    <p className="text-sm text-muted-foreground">Netflix subscription renewed</p>
+                    <span className="text-xs text-muted-foreground bg-primary/10 px-2 py-1 rounded">2h ago</span>
                   </div>
-                  <div className="border border-border p-3 rounded-lg">
-                    <div className="flex items-center gap-2 mb-1">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-sm font-medium">Task Completed</span>
-                      <span className="text-xs text-muted-foreground">4 hours ago</span>
+                  <div className="flex justify-between items-center p-3 rounded-lg hover:bg-primary/10 transition-all cursor-pointer border border-primary/10">
+                    <div className="flex items-center gap-3">
+                      <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse"></div>
+                      <div>
+                        <span className="font-medium">Task Completed</span>
+                        <p className="text-xs text-muted-foreground mt-1">Client presentation finished</p>
+                      </div>
                     </div>
-                    <p className="text-sm text-muted-foreground">Client presentation finished</p>
+                    <span className="text-xs text-muted-foreground bg-primary/10 px-2 py-1 rounded">4h ago</span>
                   </div>
-                  <div className="border border-border p-3 rounded-lg">
-                    <div className="flex items-center gap-2 mb-1">
-                      <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
-                      <span className="text-sm font-medium">Reminder Set</span>
-                      <span className="text-xs text-muted-foreground">6 hours ago</span>
+                  <div className="flex justify-between items-center p-3 rounded-lg hover:bg-primary/10 transition-all cursor-pointer border border-primary/10">
+                    <div className="flex items-center gap-3">
+                      <div className="w-3 h-3 bg-yellow-500 rounded-full animate-pulse"></div>
+                      <div>
+                        <span className="font-medium">Reminder Set</span>
+                        <p className="text-xs text-muted-foreground mt-1">Doctor appointment tomorrow</p>
+                      </div>
                     </div>
-                    <p className="text-sm text-muted-foreground">Doctor appointment tomorrow</p>
+                    <span className="text-xs text-muted-foreground bg-primary/10 px-2 py-1 rounded">6h ago</span>
                   </div>
                 </div>
               </div>
-              
-              <div className="space-y-4">
-                <h3 className="text-xl font-semibold">AI Capabilities</h3>
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <Circle className="w-4 h-4 text-primary" />
-                    <span className="text-sm">Context-aware conversations</span>
+
+              <div className="bg-gradient-to-br from-secondary/10 via-secondary/5 to-transparent p-6 rounded-2xl border border-secondary/30 shadow-lg animate-fade-in hover-scale">
+                <h4 className="font-semibold mb-4 text-secondary flex items-center gap-2">
+                  <Zap className="w-5 h-5" />
+                  AI Capabilities
+                </h4>
+                <div className="grid grid-cols-1 gap-3 text-sm">
+                  <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-secondary/10">
+                    <CheckCircle className="w-5 h-5 text-green-500" />
+                    <span>Context-aware conversations</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Circle className="w-4 h-4 text-primary" />
-                    <span className="text-sm">Multi-modal input (text, voice, images)</span>
+                  <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-secondary/10">
+                    <CheckCircle className="w-5 h-5 text-green-500" />
+                    <span>Multi-modal input (text, voice, images)</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Circle className="w-4 h-4 text-primary" />
-                    <span className="text-sm">Proactive suggestions and reminders</span>
+                  <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-secondary/10">
+                    <CheckCircle className="w-5 h-5 text-green-500" />
+                    <span>Proactive suggestions and reminders</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Circle className="w-4 h-4 text-primary" />
-                    <span className="text-sm">Memory across conversations</span>
+                  <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-secondary/10">
+                    <CheckCircle className="w-5 h-5 text-green-500" />
+                    <span>Memory across conversations</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Circle className="w-4 h-4 text-primary" />
-                    <span className="text-sm">Real-time data integration</span>
+                  <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-secondary/10">
+                    <CheckCircle className="w-5 h-5 text-green-500" />
+                    <span>Real-time data integration</span>
+                  </div>
+                  <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-secondary/10">
+                    <CheckCircle className="w-5 h-5 text-green-500" />
+                    <span>24/7 intelligent assistance</span>
                   </div>
                 </div>
               </div>
@@ -99,96 +165,276 @@ const Index = () => {
       title: "Customizable Dashboard",
       subtitle: "Your Personal Command Center",
       content: (
-        <div className="space-y-6">
-          <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold mb-4">Adaptive Widget System</h2>
-            <p className="text-lg text-muted-foreground">
-              Widgets appear only when you have data. Your dashboard grows with your lifestyle and priorities.
+        <div className="space-y-8 animate-fade-in">
+          <div className="text-center mb-12">
+            <h2 className="text-5xl font-bold mb-6 bg-gradient-to-r from-accent via-primary to-secondary bg-clip-text text-transparent animate-scale-in">
+              Intelligent Widget Ecosystem
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-4xl mx-auto">
+              Widgets that adapt to your lifestyle - if you don't have data, they don't appear. Your dashboard evolves with you.
             </p>
           </div>
-          
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold">Lifestyle IP3</h3>
-              <div className="space-y-3">
-                <div className="border border-border p-4 rounded-lg">
-                  <h4 className="font-medium mb-2">Immediate (Today)</h4>
-                  <ul className="text-sm space-y-1">
-                    <li>• Pay electricity bill</li>
-                    <li>• Client call at 3 PM</li>
-                    <li>• Grocery shopping</li>
-                  </ul>
-                </div>
-                <div className="border border-border p-4 rounded-lg">
-                  <h4 className="font-medium mb-2">Important (This Week)</h4>
-                  <ul className="text-sm space-y-1">
-                    <li>• Project proposal draft</li>
-                    <li>• Doctor appointment</li>
-                    <li>• Car service booking</li>
-                  </ul>
-                </div>
-                <div className="border border-border p-4 rounded-lg">
-                  <h4 className="font-medium mb-2">Planned (This Month)</h4>
-                  <ul className="text-sm space-y-1">
-                    <li>• Holiday planning</li>
-                    <li>• Investment review</li>
-                    <li>• Home renovation</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold">Context & Quick Wins</h3>
-              <div className="space-y-3">
-                <div className="border border-border p-4 rounded-lg">
-                  <h4 className="font-medium mb-2">Context-Aware</h4>
-                  <p className="text-sm text-muted-foreground">
-                    Working from home today - showing focused work tasks and eliminating commute reminders
-                  </p>
-                </div>
-                <div className="border border-border p-4 rounded-lg">
-                  <h4 className="font-medium mb-2">Quick Wins (5 min)</h4>
-                  <ul className="text-sm space-y-1">
-                    <li>• Reply to Sarah's email</li>
-                    <li>• Update LinkedIn status</li>
-                    <li>• Order coffee beans</li>
-                  </ul>
-                </div>
-                <div className="border border-border p-4 rounded-lg">
-                  <h4 className="font-medium mb-2">Energy Level</h4>
-                  <p className="text-sm">High energy detected - showing creative tasks first</p>
-                </div>
-              </div>
-            </div>
-            
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold">Personal Development</h3>
-              <div className="space-y-3">
-                <div className="border border-border p-4 rounded-lg">
-                  <h4 className="font-medium mb-2">Learning Goals</h4>
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm">JavaScript Mastery</span>
-                      <span className="text-xs">65%</span>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+            {/* Lifestyle IP3 Column */}
+            <div className="space-y-6">
+              <div className="bg-gradient-to-br from-primary/10 via-primary/5 to-transparent p-6 rounded-2xl border border-primary/30 shadow-lg hover-scale">
+                <h3 className="text-xl font-semibold mb-4 flex items-center gap-3 text-primary">
+                  <Layout className="w-6 h-6" />
+                  Lifestyle IP3 Matrix
+                </h3>
+                
+                <div className="space-y-4">
+                  <div className="bg-red-50 border border-red-200 p-4 rounded-xl">
+                    <h4 className="font-semibold mb-3 text-red-700 flex items-center gap-2">
+                      <Clock className="w-4 h-4" />
+                      Immediate (Today)
+                    </h4>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex items-center justify-between p-2 bg-white rounded-lg">
+                        <span>💡 Pay electricity bill</span>
+                        <span className="text-xs bg-red-100 text-red-700 px-2 py-1 rounded">Due</span>
+                      </div>
+                      <div className="flex items-center justify-between p-2 bg-white rounded-lg">
+                        <span>📞 Client call at 3 PM</span>
+                        <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">Meeting</span>
+                      </div>
+                      <div className="flex items-center justify-between p-2 bg-white rounded-lg">
+                        <span>🛒 Grocery shopping</span>
+                        <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">Personal</span>
+                      </div>
                     </div>
-                    <div className="w-full bg-muted rounded-full h-2">
-                      <div className="bg-primary h-2 rounded-full" style={{ width: '65%' }}></div>
+                  </div>
+
+                  <div className="bg-yellow-50 border border-yellow-200 p-4 rounded-xl">
+                    <h4 className="font-semibold mb-3 text-yellow-700 flex items-center gap-2">
+                      <Star className="w-4 h-4" />
+                      Important (This Week)
+                    </h4>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex items-center justify-between p-2 bg-white rounded-lg">
+                        <span>📄 Project proposal draft</span>
+                        <span className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded">Work</span>
+                      </div>
+                      <div className="flex items-center justify-between p-2 bg-white rounded-lg">
+                        <span>🏥 Doctor appointment</span>
+                        <span className="text-xs bg-pink-100 text-pink-700 px-2 py-1 rounded">Health</span>
+                      </div>
+                      <div className="flex items-center justify-between p-2 bg-white rounded-lg">
+                        <span>🚗 Car service booking</span>
+                        <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">Maintenance</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-green-50 border border-green-200 p-4 rounded-xl">
+                    <h4 className="font-semibold mb-3 text-green-700 flex items-center gap-2">
+                      <Calendar className="w-4 h-4" />
+                      Planned (This Month)
+                    </h4>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex items-center justify-between p-2 bg-white rounded-lg">
+                        <span>✈️ Holiday planning</span>
+                        <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">Travel</span>
+                      </div>
+                      <div className="flex items-center justify-between p-2 bg-white rounded-lg">
+                        <span>💰 Investment review</span>
+                        <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">Finance</span>
+                      </div>
+                      <div className="flex items-center justify-between p-2 bg-white rounded-lg">
+                        <span>🏠 Home renovation</span>
+                        <span className="text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded">Project</span>
+                      </div>
                     </div>
                   </div>
                 </div>
-                <div className="border border-border p-4 rounded-lg">
-                  <h4 className="font-medium mb-2">Ongoing Reminders</h4>
-                  <ul className="text-sm space-y-1">
-                    <li>• Drink water (every 2 hours)</li>
-                    <li>• Stand up (every hour)</li>
-                    <li>• Review daily goals (6 PM)</li>
-                  </ul>
+              </div>
+            </div>
+
+            {/* Context & Quick Wins Column */}
+            <div className="space-y-6">
+              <div className="bg-gradient-to-br from-secondary/10 via-secondary/5 to-transparent p-6 rounded-2xl border border-secondary/30 shadow-lg hover-scale">
+                <h3 className="text-xl font-semibold mb-4 flex items-center gap-3 text-secondary">
+                  <Zap className="w-6 h-6" />
+                  Smart Context & Quick Wins
+                </h3>
+                
+                <div className="space-y-4">
+                  <div className="bg-blue-50 border border-blue-200 p-4 rounded-xl">
+                    <h4 className="font-semibold mb-3 text-blue-700 flex items-center gap-2">
+                      <Settings className="w-4 h-4" />
+                      Context-Aware Mode
+                    </h4>
+                    <div className="bg-white p-3 rounded-lg">
+                      <p className="text-sm text-blue-600">🏠 Working from home today</p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Showing focused work tasks, hiding commute reminders, suggesting home productivity optimizations
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="bg-green-50 border border-green-200 p-4 rounded-xl">
+                    <h4 className="font-semibold mb-3 text-green-700 flex items-center gap-2">
+                      <CheckCircle className="w-4 h-4" />
+                      Quick Wins (≤5 minutes)
+                    </h4>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex items-center justify-between p-2 bg-white rounded-lg cursor-pointer hover:bg-green-100">
+                        <span>📧 Reply to Sarah's email</span>
+                        <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">2 min</span>
+                      </div>
+                      <div className="flex items-center justify-between p-2 bg-white rounded-lg cursor-pointer hover:bg-green-100">
+                        <span>📱 Update LinkedIn status</span>
+                        <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">1 min</span>
+                      </div>
+                      <div className="flex items-center justify-between p-2 bg-white rounded-lg cursor-pointer hover:bg-green-100">
+                        <span>☕ Order coffee beans</span>
+                        <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">3 min</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-purple-50 border border-purple-200 p-4 rounded-xl">
+                    <h4 className="font-semibold mb-3 text-purple-700 flex items-center gap-2">
+                      <TrendingUp className="w-4 h-4" />
+                      Energy & Focus
+                    </h4>
+                    <div className="bg-white p-3 rounded-lg">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-sm font-medium">Current Energy</span>
+                        <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">High ⚡</span>
+                      </div>
+                      <p className="text-xs text-muted-foreground">
+                        Prioritizing creative tasks and complex problem-solving
+                      </p>
+                    </div>
+                  </div>
                 </div>
-                <div className="border border-border p-4 rounded-lg">
-                  <h4 className="font-medium mb-2">Habits Tracking</h4>
-                  <p className="text-sm">7-day meditation streak 🔥</p>
+              </div>
+            </div>
+
+            {/* Personal Development & Artifacts */}
+            <div className="space-y-6 lg:col-span-2 xl:col-span-1">
+              <div className="bg-gradient-to-br from-accent/10 via-accent/5 to-transparent p-6 rounded-2xl border border-accent/30 shadow-lg hover-scale">
+                <h3 className="text-xl font-semibold mb-4 flex items-center gap-3 text-accent">
+                  <FileText className="w-6 h-6" />
+                  Development & Memory Bank
+                </h3>
+                
+                <div className="space-y-4">
+                  <div className="bg-orange-50 border border-orange-200 p-4 rounded-xl">
+                    <h4 className="font-semibold mb-3 text-orange-700 flex items-center gap-2">
+                      <Star className="w-4 h-4" />
+                      Learning Progress
+                    </h4>
+                    <div className="space-y-3">
+                      <div>
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="text-sm font-medium">JavaScript Mastery</span>
+                          <span className="text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded">65%</span>
+                        </div>
+                        <div className="w-full bg-orange-100 rounded-full h-2">
+                          <div className="bg-gradient-to-r from-orange-400 to-orange-600 h-2 rounded-full transition-all" style={{ width: '65%' }}></div>
+                        </div>
+                      </div>
+                      <div>
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="text-sm font-medium">UI/UX Design</span>
+                          <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">40%</span>
+                        </div>
+                        <div className="w-full bg-blue-100 rounded-full h-2">
+                          <div className="bg-gradient-to-r from-blue-400 to-blue-600 h-2 rounded-full transition-all" style={{ width: '40%' }}></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-pink-50 border border-pink-200 p-4 rounded-xl">
+                    <h4 className="font-semibold mb-3 text-pink-700 flex items-center gap-2">
+                      <Bell className="w-4 h-4" />
+                      Lifestyle Reminders
+                    </h4>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex items-center gap-2 p-2 bg-white rounded-lg">
+                        <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                        <span>💧 Drink water (every 2 hours)</span>
+                      </div>
+                      <div className="flex items-center gap-2 p-2 bg-white rounded-lg">
+                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                        <span>🚶 Stand & stretch (every hour)</span>
+                      </div>
+                      <div className="flex items-center gap-2 p-2 bg-white rounded-lg">
+                        <div className="w-2 h-2 bg-purple-500 rounded-full animate-pulse"></div>
+                        <span>📊 Review daily goals (6 PM)</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-indigo-50 border border-indigo-200 p-4 rounded-xl">
+                    <h4 className="font-semibold mb-3 text-indigo-700 flex items-center gap-2">
+                      <Folder className="w-4 h-4" />
+                      Artifacts Storage
+                    </h4>
+                    <div className="grid grid-cols-2 gap-2 text-xs">
+                      <div className="bg-white p-2 rounded-lg text-center cursor-pointer hover:bg-indigo-100 transition-all">
+                        <div className="text-lg mb-1">📄</div>
+                        <span>Documents</span>
+                        <div className="text-xs text-muted-foreground">24 items</div>
+                      </div>
+                      <div className="bg-white p-2 rounded-lg text-center cursor-pointer hover:bg-indigo-100 transition-all">
+                        <div className="text-lg mb-1">🖼️</div>
+                        <span>Images</span>
+                        <div className="text-xs text-muted-foreground">156 items</div>
+                      </div>
+                      <div className="bg-white p-2 rounded-lg text-center cursor-pointer hover:bg-indigo-100 transition-all">
+                        <div className="text-lg mb-1">🎵</div>
+                        <span>Audio</span>
+                        <div className="text-xs text-muted-foreground">8 items</div>
+                      </div>
+                      <div className="bg-white p-2 rounded-lg text-center cursor-pointer hover:bg-indigo-100 transition-all">
+                        <div className="text-lg mb-1">🎬</div>
+                        <span>Videos</span>
+                        <div className="text-xs text-muted-foreground">12 items</div>
+                      </div>
+                    </div>
+                    
+                    <div className="mt-3 p-2 bg-white rounded-lg">
+                      <p className="text-xs text-indigo-600 font-medium">🔥 Habit Streaks</p>
+                      <div className="flex gap-2 mt-1">
+                        <span className="text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded">Meditation: 7 days</span>
+                        <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">Reading: 12 days</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Customization Panel */}
+          <div className="mt-12 p-6 bg-gradient-to-r from-primary/5 via-secondary/5 to-accent/5 rounded-2xl border border-primary/20">
+            <h3 className="text-2xl font-semibold mb-4 text-center">Complete Customization Control</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="text-center">
+                <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                  <Layout className="w-8 h-8 text-primary" />
+                </div>
+                <h4 className="font-semibold mb-2">Widget Library</h4>
+                <p className="text-sm text-muted-foreground">Choose from 50+ widgets. Add, remove, resize, and position as needed.</p>
+              </div>
+              <div className="text-center">
+                <div className="w-16 h-16 bg-secondary/10 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                  <Settings className="w-8 h-8 text-secondary" />
+                </div>
+                <h4 className="font-semibold mb-2">Smart Automation</h4>
+                <p className="text-sm text-muted-foreground">Widgets automatically appear based on your data and behavior patterns.</p>
+              </div>
+              <div className="text-center">
+                <div className="w-16 h-16 bg-accent/10 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                  <Users className="w-8 h-8 text-accent" />
+                </div>
+                <h4 className="font-semibold mb-2">Context Profiles</h4>
+                <p className="text-sm text-muted-foreground">Work mode, personal mode, travel mode - your dashboard adapts instantly.</p>
               </div>
             </div>
           </div>
