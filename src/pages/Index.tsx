@@ -6,39 +6,627 @@ const Index = () => {
 
   const slides = [
     {
-      id: "hero",
-      title: "AI Productivity Companion",
-      subtitle: "The Orchestration Layer That Changes Everything",
+      id: "chat",
+      title: "Conversational AI Interface",
+      subtitle: "Your Personal Productivity Assistant",
       content: (
         <div className="space-y-8">
-          <div className="text-center">
-            <h2 className="text-2xl font-bold mb-4">Your Intelligent Productivity Operating System</h2>
-            <p className="text-lg text-muted-foreground max-w-4xl mx-auto">
-              The world's first AI-powered orchestration layer that monitors, learns, and acts across your entire productivity ecosystem. 
-              No migration required. No workflow changes. Just seamless intelligence that makes you 10x more productive.
+          <div className="max-w-4xl mx-auto">
+            <div className="bg-muted/30 rounded-lg p-6 mb-8">
+              <h2 className="text-2xl font-bold mb-6 text-center">Chat Interface</h2>
+              <div className="space-y-4">
+                <div className="flex justify-start">
+                  <div className="bg-primary text-primary-foreground rounded-lg px-4 py-2 max-w-xs">
+                    Good morning! I noticed you have 3 urgent tasks and a payment due tomorrow. Should I prioritize these?
+                  </div>
+                </div>
+                <div className="flex justify-end">
+                  <div className="bg-muted rounded-lg px-4 py-2 max-w-xs">
+                    Yes, please show me the payment details first
+                  </div>
+                </div>
+                <div className="flex justify-start">
+                  <div className="bg-primary text-primary-foreground rounded-lg px-4 py-2 max-w-xs">
+                    Your electricity bill (£127) is due tomorrow. I can set up auto-pay or remind you at 6 PM today?
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-4">
+                <h3 className="text-xl font-semibold">Recent Events</h3>
+                <div className="space-y-3">
+                  <div className="border border-border p-3 rounded-lg">
+                    <div className="flex items-center gap-2 mb-1">
+                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                      <span className="text-sm font-medium">Payment Processed</span>
+                      <span className="text-xs text-muted-foreground">2 hours ago</span>
+                    </div>
+                    <p className="text-sm text-muted-foreground">Netflix subscription renewed</p>
+                  </div>
+                  <div className="border border-border p-3 rounded-lg">
+                    <div className="flex items-center gap-2 mb-1">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                      <span className="text-sm font-medium">Task Completed</span>
+                      <span className="text-xs text-muted-foreground">4 hours ago</span>
+                    </div>
+                    <p className="text-sm text-muted-foreground">Client presentation finished</p>
+                  </div>
+                  <div className="border border-border p-3 rounded-lg">
+                    <div className="flex items-center gap-2 mb-1">
+                      <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                      <span className="text-sm font-medium">Reminder Set</span>
+                      <span className="text-xs text-muted-foreground">6 hours ago</span>
+                    </div>
+                    <p className="text-sm text-muted-foreground">Doctor appointment tomorrow</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="space-y-4">
+                <h3 className="text-xl font-semibold">AI Capabilities</h3>
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <Circle className="w-4 h-4 text-primary" />
+                    <span className="text-sm">Context-aware conversations</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Circle className="w-4 h-4 text-primary" />
+                    <span className="text-sm">Multi-modal input (text, voice, images)</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Circle className="w-4 h-4 text-primary" />
+                    <span className="text-sm">Proactive suggestions and reminders</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Circle className="w-4 h-4 text-primary" />
+                    <span className="text-sm">Memory across conversations</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Circle className="w-4 h-4 text-primary" />
+                    <span className="text-sm">Real-time data integration</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )
+    },
+    {
+      id: "dashboard",
+      title: "Customizable Dashboard",
+      subtitle: "Your Personal Command Center",
+      content: (
+        <div className="space-y-6">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-bold mb-4">Adaptive Widget System</h2>
+            <p className="text-lg text-muted-foreground">
+              Widgets appear only when you have data. Your dashboard grows with your lifestyle and priorities.
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Circle className="w-8 h-8 text-primary" />
+          
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold">Lifestyle IP3</h3>
+              <div className="space-y-3">
+                <div className="border border-border p-4 rounded-lg">
+                  <h4 className="font-medium mb-2">Immediate (Today)</h4>
+                  <ul className="text-sm space-y-1">
+                    <li>• Pay electricity bill</li>
+                    <li>• Client call at 3 PM</li>
+                    <li>• Grocery shopping</li>
+                  </ul>
+                </div>
+                <div className="border border-border p-4 rounded-lg">
+                  <h4 className="font-medium mb-2">Important (This Week)</h4>
+                  <ul className="text-sm space-y-1">
+                    <li>• Project proposal draft</li>
+                    <li>• Doctor appointment</li>
+                    <li>• Car service booking</li>
+                  </ul>
+                </div>
+                <div className="border border-border p-4 rounded-lg">
+                  <h4 className="font-medium mb-2">Planned (This Month)</h4>
+                  <ul className="text-sm space-y-1">
+                    <li>• Holiday planning</li>
+                    <li>• Investment review</li>
+                    <li>• Home renovation</li>
+                  </ul>
+                </div>
               </div>
-              <h3 className="font-semibold mb-2">Always Watching</h3>
-              <p className="text-sm text-muted-foreground">24/7 monitoring of your productivity patterns</p>
             </div>
-            <div className="text-center">
-              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Circle className="w-8 h-8 text-primary" />
+            
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold">Context & Quick Wins</h3>
+              <div className="space-y-3">
+                <div className="border border-border p-4 rounded-lg">
+                  <h4 className="font-medium mb-2">Context-Aware</h4>
+                  <p className="text-sm text-muted-foreground">
+                    Working from home today - showing focused work tasks and eliminating commute reminders
+                  </p>
+                </div>
+                <div className="border border-border p-4 rounded-lg">
+                  <h4 className="font-medium mb-2">Quick Wins (5 min)</h4>
+                  <ul className="text-sm space-y-1">
+                    <li>• Reply to Sarah's email</li>
+                    <li>• Update LinkedIn status</li>
+                    <li>• Order coffee beans</li>
+                  </ul>
+                </div>
+                <div className="border border-border p-4 rounded-lg">
+                  <h4 className="font-medium mb-2">Energy Level</h4>
+                  <p className="text-sm">High energy detected - showing creative tasks first</p>
+                </div>
               </div>
-              <h3 className="font-semibold mb-2">Smart Triggers</h3>
-              <p className="text-sm text-muted-foreground">Intelligent automation based on context</p>
             </div>
-            <div className="text-center">
-              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Circle className="w-8 h-8 text-primary" />
+            
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold">Personal Development</h3>
+              <div className="space-y-3">
+                <div className="border border-border p-4 rounded-lg">
+                  <h4 className="font-medium mb-2">Learning Goals</h4>
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm">JavaScript Mastery</span>
+                      <span className="text-xs">65%</span>
+                    </div>
+                    <div className="w-full bg-muted rounded-full h-2">
+                      <div className="bg-primary h-2 rounded-full" style={{ width: '65%' }}></div>
+                    </div>
+                  </div>
+                </div>
+                <div className="border border-border p-4 rounded-lg">
+                  <h4 className="font-medium mb-2">Ongoing Reminders</h4>
+                  <ul className="text-sm space-y-1">
+                    <li>• Drink water (every 2 hours)</li>
+                    <li>• Stand up (every hour)</li>
+                    <li>• Review daily goals (6 PM)</li>
+                  </ul>
+                </div>
+                <div className="border border-border p-4 rounded-lg">
+                  <h4 className="font-medium mb-2">Habits Tracking</h4>
+                  <p className="text-sm">7-day meditation streak 🔥</p>
+                </div>
               </div>
-              <h3 className="font-semibold mb-2">Zero Friction</h3>
-              <p className="text-sm text-muted-foreground">Works with your existing tools seamlessly</p>
+            </div>
+          </div>
+        </div>
+      )
+    },
+    {
+      id: "privacy",
+      title: "Data Privacy & Ownership", 
+      subtitle: "Your Data Stays Yours - Period",
+      content: (
+        <div className="space-y-6">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-bold mb-4">Zero Monitoring Philosophy</h2>
+            <p className="text-lg text-muted-foreground">
+              Nobody monitors your data. Everything is stored locally on your devices. You control every bit of information.
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="space-y-6">
+              <div className="border border-border p-6 rounded-lg">
+                <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                  <Circle className="w-6 h-6 text-green-500" />
+                  Local Storage First
+                </h3>
+                <ul className="space-y-2 text-sm">
+                  <li>• All data stored on your laptop/device</li>
+                  <li>• Encrypted local database</li>
+                  <li>• No cloud dependency for core functions</li>
+                  <li>• Your device, your rules</li>
+                </ul>
+              </div>
+              
+              <div className="border border-border p-6 rounded-lg">
+                <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                  <Circle className="w-6 h-6 text-blue-500" />
+                  Selective Sharing
+                </h3>
+                <ul className="space-y-2 text-sm">
+                  <li>• You choose what to share</li>
+                  <li>• Permission-based connections</li>
+                  <li>• Granular privacy controls</li>
+                  <li>• Easy disconnect anytime</li>
+                </ul>
+              </div>
+            </div>
+            
+            <div className="space-y-6">
+              <div className="border border-border p-6 rounded-lg">
+                <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                  <Circle className="w-6 h-6 text-purple-500" />
+                  Data Minimalism
+                </h3>
+                <ul className="space-y-2 text-sm">
+                  <li>• Only collect what's necessary</li>
+                  <li>• Automatic data expiry options</li>
+                  <li>• No behavioral profiling</li>
+                  <li>• Transparent data usage</li>
+                </ul>
+              </div>
+              
+              <div className="border border-border p-6 rounded-lg">
+                <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                  <Circle className="w-6 h-6 text-red-500" />
+                  Security First
+                </h3>
+                <ul className="space-y-2 text-sm">
+                  <li>• End-to-end encryption</li>
+                  <li>• Zero-knowledge architecture</li>
+                  <li>• Regular security audits</li>
+                  <li>• Open source core components</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+          <div className="mt-8 p-6 border border-primary rounded-lg bg-primary/5">
+            <h3 className="text-xl font-semibold mb-4 text-center">Your Digital Rights</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="text-center">
+                <h4 className="font-medium mb-2">Own Your Data</h4>
+                <p className="text-sm text-muted-foreground">Complete ownership and control</p>
+              </div>
+              <div className="text-center">
+                <h4 className="font-medium mb-2">Export Anytime</h4>
+                <p className="text-sm text-muted-foreground">Full data portability</p>
+              </div>
+              <div className="text-center">
+                <h4 className="font-medium mb-2">Delete Anytime</h4>
+                <p className="text-sm text-muted-foreground">Right to be forgotten</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )
+    },
+    {
+      id: "notifications",
+      title: "Smart Notifications & Social Integration",
+      subtitle: "Connect Everything, Stay Informed",
+      content: (
+        <div className="space-y-6">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-bold mb-4">Universal Integration Hub</h2>
+            <p className="text-lg text-muted-foreground">
+              Plug into anything in your social life or work environment. Everything can connect, everything can be automated.
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="space-y-6">
+              <h3 className="text-xl font-semibold">Social Integration</h3>
+              <div className="space-y-4">
+                <div className="border border-border p-4 rounded-lg">
+                  <h4 className="font-medium mb-2 flex items-center gap-2">
+                    <Circle className="w-4 h-4 text-blue-500" />
+                    Social Media Management
+                  </h4>
+                  <ul className="text-sm space-y-1">
+                    <li>• Auto-schedule posts across platforms</li>
+                    <li>• Track engagement and mentions</li>
+                    <li>• Content calendar optimization</li>
+                    <li>• Brand monitoring and alerts</li>
+                  </ul>
+                </div>
+                
+                <div className="border border-border p-4 rounded-lg">
+                  <h4 className="font-medium mb-2 flex items-center gap-2">
+                    <Circle className="w-4 h-4 text-green-500" />
+                    Personal Networks
+                  </h4>
+                  <ul className="text-sm space-y-1">
+                    <li>• LinkedIn networking automation</li>
+                    <li>• Birthday and anniversary reminders</li>
+                    <li>• Follow-up scheduling</li>
+                    <li>• Contact relationship mapping</li>
+                  </ul>
+                </div>
+                
+                <div className="border border-border p-4 rounded-lg">
+                  <h4 className="font-medium mb-2 flex items-center gap-2">
+                    <Circle className="w-4 h-4 text-purple-500" />
+                    Community Engagement
+                  </h4>
+                  <ul className="text-sm space-y-1">
+                    <li>• Discord/Slack activity tracking</li>
+                    <li>• Forum and community monitoring</li>
+                    <li>• Event planning and coordination</li>
+                    <li>• Group project management</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            
+            <div className="space-y-6">
+              <h3 className="text-xl font-semibold">Smart Notifications</h3>
+              <div className="space-y-4">
+                <div className="border border-border p-4 rounded-lg">
+                  <h4 className="font-medium mb-2">Context-Aware Alerts</h4>
+                  <p className="text-sm text-muted-foreground mb-2">
+                    Notifications that understand your availability and priorities
+                  </p>
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between text-sm">
+                      <span>Important: Client email received</span>
+                      <span className="text-green-500">Now</span>
+                    </div>
+                    <div className="flex items-center justify-between text-sm">
+                      <span>Reminder: Team meeting in 15 min</span>
+                      <span className="text-yellow-500">Snooze</span>
+                    </div>
+                    <div className="flex items-center justify-between text-sm">
+                      <span>Low priority: Newsletter digest</span>
+                      <span className="text-muted-foreground">Later</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="border border-border p-4 rounded-lg">
+                  <h4 className="font-medium mb-2">Multi-Channel Delivery</h4>
+                  <ul className="text-sm space-y-1">
+                    <li>• Push notifications (mobile/desktop)</li>
+                    <li>• Email digests (daily/weekly)</li>
+                    <li>• SMS for urgent items</li>
+                    <li>• Voice assistant integration</li>
+                    <li>• Smartwatch notifications</li>
+                  </ul>
+                </div>
+                
+                <div className="border border-border p-4 rounded-lg">
+                  <h4 className="font-medium mb-2">Social Login Integration</h4>
+                  <p className="text-sm text-muted-foreground">
+                    One-click access across all your platforms and services. Secure, seamless, and synchronized.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )
+    },
+    {
+      id: "tasks",
+      title: "Intelligent Task & Financial Management",
+      subtitle: "Complete Life Orchestration",
+      content: (
+        <div className="space-y-6">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-bold mb-4">Work Hard, Play Hard Philosophy</h2>
+            <p className="text-lg text-muted-foreground">
+              Balance productivity with personal fulfillment. Manage tasks, finances, and life experiences in perfect harmony.
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="space-y-6">
+              <h3 className="text-xl font-semibold">Task Management</h3>
+              <div className="space-y-4">
+                <div className="border border-border p-4 rounded-lg">
+                  <h4 className="font-medium mb-2">Agent-Assisted Tasks</h4>
+                  <ul className="text-sm space-y-1">
+                    <li>• AI agents handle routine tasks</li>
+                    <li>• Automated email responses</li>
+                    <li>• Data entry and processing</li>
+                    <li>• Research and information gathering</li>
+                    <li>• Schedule optimization</li>
+                  </ul>
+                </div>
+                
+                <div className="border border-border p-4 rounded-lg">
+                  <h4 className="font-medium mb-2">Personal Tasks</h4>
+                  <ul className="text-sm space-y-1">
+                    <li>• Manual task tracking and completion</li>
+                    <li>• Personal project management</li>
+                    <li>• Goal setting and achievement</li>
+                    <li>• Habit formation and tracking</li>
+                    <li>• Creative and strategic work</li>
+                  </ul>
+                </div>
+                
+                <div className="border border-border p-4 rounded-lg">
+                  <h4 className="font-medium mb-2">Third-Party Tasks</h4>
+                  <ul className="text-sm space-y-1">
+                    <li>• Collaborative project management</li>
+                    <li>• Team coordination and delegation</li>
+                    <li>• External vendor management</li>
+                    <li>• Client work and deliverables</li>
+                    <li>• Partnership activities</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            
+            <div className="space-y-6">
+              <h3 className="text-xl font-semibold">Financial Intelligence</h3>
+              <div className="space-y-4">
+                <div className="border border-border p-4 rounded-lg">
+                  <h4 className="font-medium mb-2">Smart Financial Advice</h4>
+                  <ul className="text-sm space-y-1">
+                    <li>• Personalized savings recommendations</li>
+                    <li>• Credit building strategies</li>
+                    <li>• Investment opportunity analysis</li>
+                    <li>• Debt optimization plans</li>
+                    <li>• Emergency fund planning</li>
+                  </ul>
+                </div>
+                
+                <div className="border border-border p-4 rounded-lg">
+                  <h4 className="font-medium mb-2">Payment Timeline Management</h4>
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between text-sm">
+                      <span>Electricity Bill</span>
+                      <span className="text-red-500">Due Tomorrow</span>
+                    </div>
+                    <div className="flex items-center justify-between text-sm">
+                      <span>Credit Card Payment</span>
+                      <span className="text-yellow-500">Due in 3 days</span>
+                    </div>
+                    <div className="flex items-center justify-between text-sm">
+                      <span>Mortgage Payment</span>
+                      <span className="text-green-500">Paid</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="border border-border p-4 rounded-lg">
+                  <h4 className="font-medium mb-2">Life Balance Planning</h4>
+                  <ul className="text-sm space-y-1">
+                    <li>• Trip and holiday planning</li>
+                    <li>• Social event organization</li>
+                    <li>• Work-life balance optimization</li>
+                    <li>• Leisure activity scheduling</li>
+                    <li>• Experience budgeting</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div className="mt-8 p-6 border border-primary rounded-lg bg-primary/5">
+            <h3 className="text-xl font-semibold mb-4 text-center">Productivity Philosophy</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="text-center">
+                <h4 className="font-medium mb-2">Work Smart</h4>
+                <p className="text-sm text-muted-foreground">
+                  Optimize efficiency with AI assistance, automation, and intelligent prioritization
+                </p>
+              </div>
+              <div className="text-center">
+                <h4 className="font-medium mb-2">Live Well</h4>
+                <p className="text-sm text-muted-foreground">
+                  Plan memorable experiences, maintain relationships, and enjoy life's adventures
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )
+    },
+    {
+      id: "security",
+      title: "Enterprise Security & Compliance",
+      subtitle: "Fort Knox for Your Digital Life",
+      content: (
+        <div className="space-y-6">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-bold mb-4">Maximum Security, Maximum Control</h2>
+            <p className="text-lg text-muted-foreground">
+              Padlocks everywhere. Licenses everywhere. No monitoring, no storage, complete data ownership.
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="space-y-6">
+              <div className="border border-border p-6 rounded-lg">
+                <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                  <Circle className="w-6 h-6 text-red-500" />
+                  Security Certifications
+                </h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="text-center p-3 border border-border rounded">
+                    <div className="text-sm font-medium">SOC 2 Type II</div>
+                    <div className="text-xs text-muted-foreground">Certified</div>
+                  </div>
+                  <div className="text-center p-3 border border-border rounded">
+                    <div className="text-sm font-medium">ISO 27001</div>
+                    <div className="text-xs text-muted-foreground">Certified</div>
+                  </div>
+                  <div className="text-center p-3 border border-border rounded">
+                    <div className="text-sm font-medium">GDPR</div>
+                    <div className="text-xs text-muted-foreground">Compliant</div>
+                  </div>
+                  <div className="text-center p-3 border border-border rounded">
+                    <div className="text-sm font-medium">HIPAA</div>
+                    <div className="text-xs text-muted-foreground">Ready</div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="border border-border p-6 rounded-lg">
+                <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                  <Circle className="w-6 h-6 text-blue-500" />
+                  Data Ownership Rights
+                </h3>
+                <ul className="space-y-2 text-sm">
+                  <li>• 100% data ownership guarantee</li>
+                  <li>• Local storage with encryption</li>
+                  <li>• Zero corporate surveillance</li>
+                  <li>• Transparent data processing</li>
+                  <li>• Right to digital forgetting</li>
+                  <li>• Portable data standards</li>
+                </ul>
+              </div>
+            </div>
+            
+            <div className="space-y-6">
+              <div className="border border-border p-6 rounded-lg">
+                <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                  <Circle className="w-6 h-6 text-green-500" />
+                  Digital Asset Management
+                </h3>
+                <p className="text-sm text-muted-foreground mb-4">
+                  All your documents and digital assets are available to you instantly. Need a file? Copy it. Paste it. Keep it wherever you want.
+                </p>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between p-2 border border-border rounded">
+                    <span className="text-sm">Contract_2024.pdf</span>
+                    <button className="text-xs bg-primary text-primary-foreground px-2 py-1 rounded">Copy</button>
+                  </div>
+                  <div className="flex items-center justify-between p-2 border border-border rounded">
+                    <span className="text-sm">Meeting_Notes.docx</span>
+                    <button className="text-xs bg-primary text-primary-foreground px-2 py-1 rounded">Copy</button>
+                  </div>
+                  <div className="flex items-center justify-between p-2 border border-border rounded">
+                    <span className="text-sm">Financial_Report.xlsx</span>
+                    <button className="text-xs bg-primary text-primary-foreground px-2 py-1 rounded">Copy</button>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="border border-border p-6 rounded-lg">
+                <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                  <Circle className="w-6 h-6 text-purple-500" />
+                  Zero-Trust Architecture
+                </h3>
+                <ul className="space-y-2 text-sm">
+                  <li>• Multi-factor authentication</li>
+                  <li>• Role-based access control</li>
+                  <li>• Continuous security monitoring</li>
+                  <li>• Encrypted data transmission</li>
+                  <li>• Regular security audits</li>
+                  <li>• Incident response protocols</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+          <div className="mt-8 grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="text-center p-4 border border-border rounded-lg">
+              <div className="text-2xl mb-2">🔒</div>
+              <h4 className="font-semibold mb-1">No Monitoring</h4>
+              <p className="text-xs text-muted-foreground">Your activity stays private</p>
+            </div>
+            <div className="text-center p-4 border border-border rounded-lg">
+              <div className="text-2xl mb-2">📋</div>
+              <h4 className="font-semibold mb-1">Full Compliance</h4>
+              <p className="text-xs text-muted-foreground">Industry standard certifications</p>
+            </div>
+            <div className="text-center p-4 border border-border rounded-lg">
+              <div className="text-2xl mb-2">💾</div>
+              <h4 className="font-semibold mb-1">Your Storage</h4>
+              <p className="text-xs text-muted-foreground">Data lives on your devices</p>
+            </div>
+            <div className="text-center p-4 border border-border rounded-lg">
+              <div className="text-2xl mb-2">🛡️</div>
+              <h4 className="font-semibold mb-1">Military Grade</h4>
+              <p className="text-xs text-muted-foreground">Enterprise security standards</p>
             </div>
           </div>
         </div>
