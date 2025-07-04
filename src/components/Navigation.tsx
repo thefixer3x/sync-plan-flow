@@ -7,6 +7,7 @@ const Navigation = () => {
     { path: "/", label: "Home" },
     { path: "/dashboard", label: "Dashboard" },
     { path: "/chat", label: "AI Chat" },
+    { path: "/connectivity", label: "Connectivity" },
     { path: "/orchestration", label: "Orchestration" },
     { path: "/analytics", label: "Analytics" },
     { path: "/integrations", label: "Integrations" },
