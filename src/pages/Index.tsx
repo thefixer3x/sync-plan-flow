@@ -1,5 +1,9 @@
 import { useState } from "react";
-import { ChevronLeft, ChevronRight, ArrowRight, Circle, MessageSquare, Clock, Zap, CheckCircle, Layout, FileText, Folder, Star, TrendingUp, Calendar, Bell, Shield, Lock, Users, Settings } from "lucide-react";
+import { ChevronLeft, ChevronRight, ArrowRight, Circle, MessageSquare, Clock, Zap, CheckCircle, Layout, FileText, Folder, Star, TrendingUp, Calendar, Bell, Shield, Lock, Users, Settings, Sparkles, Smartphone, Database } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+
+import ThemeCustomizer from "../components/ThemeCustomizer";
 
 const Index = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -1466,6 +1470,132 @@ const Index = () => {
                   </ul>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      )
+    },
+    {
+      id: "themes",
+      title: "Theme Your Vibe",
+      subtitle: "No Boring Allowed - Gen Z Customization",
+      content: (
+        <div className="space-y-8 animate-fade-in">
+          <div className="text-center mb-12">
+            <h2 className="text-5xl font-bold bg-gradient-to-r from-neon-pink via-electric-blue to-neon-green bg-clip-text text-transparent animate-scale-in">
+              One App Keeps You in Sync with the World
+            </h2>
+            <p className="text-2xl text-muted-foreground max-w-4xl mx-auto mt-6">
+              Update here → It's updated everywhere. MCP, APIs, anything connected stays persistent. 
+              Your personalized AI agent making sure you're the better version of yourself.
+            </p>
+            <div className="flex justify-center gap-4 mt-8">
+              <Badge variant="secondary" className="text-lg px-6 py-3 bg-gradient-neon text-white border-0">
+                <Sparkles className="w-5 h-5 mr-2" />
+                Built for Gen Z
+              </Badge>
+              <Badge variant="outline" className="text-lg px-6 py-3 hover-neon">
+                <Zap className="w-5 h-5 mr-2" />
+                Zero Technical Stress
+              </Badge>
+            </div>
+          </div>
+
+          <ThemeCustomizer />
+
+          {/* Design Elements Placeholder Section */}
+          <div className="mt-16 space-y-8">
+            <h3 className="text-3xl font-bold text-center">Future Design Elements</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <Card className="design-placeholder hover-glow">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Smartphone className="w-6 h-6" />
+                    Mobile-First Widgets
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground">
+                    TikTok-style vertical scrolling through your tasks and notifications. 
+                    Swipe gestures for quick actions.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="design-placeholder hover-glow">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <MessageSquare className="w-6 h-6" />
+                    AI Chat Personalities
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground">
+                    Choose your AI's vibe: Bestie mode, Boss mode, Therapist mode, 
+                    or create custom personalities that match your energy.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="design-placeholder hover-glow">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Users className="w-6 h-6" />
+                    Social Productivity
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground">
+                    Share achievements, compete with friends, and celebrate wins together. 
+                    Make productivity social and fun.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="design-placeholder hover-glow">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Calendar className="w-6 h-6" />
+                    Mood-Based Scheduling
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground">
+                    AI learns your energy patterns and mood cycles to suggest 
+                    optimal times for different types of work.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="design-placeholder hover-glow">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Database className="w-6 h-6" />
+                    Memory Visualizer
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground">
+                    See your digital life as beautiful, interactive mind maps. 
+                    Connections between ideas, people, and projects come alive.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="design-placeholder hover-glow">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Star className="w-6 h-6" />
+                    Achievement System
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground">
+                    Level up your life with streaks, badges, and celebrations. 
+                    Turn boring tasks into exciting challenges.
+                  </p>
+                </CardContent>
+              </Card>
             </div>
           </div>
         </div>
