@@ -14,6 +14,9 @@ import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 import Navigation from "./components/Navigation";
 import FloatingAIChat from "./components/FloatingAIChat";
+import BellaVariant2 from "./components/bella/BellaVariant2";
+import BellaVariant4 from "./components/bella/BellaVariant4";
+import BellaDemo from "./pages/BellaDemo";
 
 const queryClient = new QueryClient();
 
@@ -33,6 +36,9 @@ const App = () => (
           <Route path="/integrations" element={<Integrations />} />
           <Route path="/connectivity" element={<Connectivity />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/bella" element={<BellaDemo />} />
+          <Route path="/bella-v2" element={<BellaVariant2 />} />
+          <Route path="/bella-v4" element={<BellaVariant4 />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <FloatingAIChat />

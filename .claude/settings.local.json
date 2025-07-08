@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(claude mcp:*)",
+      "Bash(find:*)",
+      "Bash(ls:*)",
+      "WebFetch(domain:vortexcore-one.vercel.app)",
+      "mcp__pica__get_pica_platform_actions",
+      "mcp__pica__get_pica_action_knowledge",
+      "mcp___21st-dev_magic__21st_magic_component_builder",
+      "Bash(npm run dev:*)",
+      "Bash(bun:*)"
+    ],
+    "deny": []
+  }
+}
