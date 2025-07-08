@@ -12,6 +12,24 @@ dist
 dist-ssr
 *.local
 
+# Environment variables and secrets
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.pem
+*.key
+*.p12
+*secret*
+*token*
+*password*
+config.json
+
+# MCP server configuration (use environment variables instead)
+add_mcp_servers*.sh
+mcp_config*.sh
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
