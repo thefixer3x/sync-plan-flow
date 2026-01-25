@@ -115,6 +115,116 @@ export function TaskBoard({ tasks, onToggleComplete, onAddTask, className }: Tas
     );
   }
 
+  if (viewMode === "calendar") {
+    // Get the current week's dates (Sunday to Saturday)
+    const today = new Date();
+    const startOfWeek = new Date(today);
+    startOfWeek.setDate(today.getDate() - today.getDay());
+
+    const weekDays = Array.from({ length: 7 }, (_, i) => {
+      const date = new Date(startOfWeek);
+      date.setDate(startOfWeek.getDate() + i);
+      return date;
+    });
+
+    const getTasksForDate = (date: Date) => {
+      return tasks.filter(task => {
+        if (!task.dueDate) return false;
+        const taskDate = new Date(task.dueDate);
+        return taskDate.toDateString() === date.toDateString();
+      });
+    };
+
+    const formatDayName = (date: Date) => {
+      return date.toLocaleDateString('en-US', { weekday: 'short' });
+    };
+
+    const formatDayNumber = (date: Date) => {
+      return date.getDate();
+    };
+
+    const isToday = (date: Date) => {
+      return date.toDateString() === today.toDateString();
+    };
+
+    const tasksWithoutDueDate = tasks.filter(task => !task.dueDate);
+
+    return (
+      <div className={cn("space-y-6", className)}>
+        {renderHeader("Calendar View")}
+        {renderProgressBar()}
+
+        {/* Week Calendar Grid */}
+        <div className="grid grid-cols-7 gap-2">
+          {weekDays.map((date) => {
+            const dayTasks = getTasksForDate(date);
+
+            return (
+              <Card
+                key={date.toISOString()}
+                className={cn(
+                  "min-h-[300px] p-2",
+                  isToday(date) && "ring-2 ring-primary"
+                )}
+              >
+                <div className={cn(
+                  "text-center mb-2 pb-2 border-b",
+                  isToday(date) && "text-primary font-bold"
+                )}>
+                  <div className="text-xs text-muted-foreground">
+                    {formatDayName(date)}
+                  </div>
+                  <div className={cn(
+                    "text-lg",
+                    isToday(date) && "bg-primary text-primary-foreground rounded-full w-8 h-8 flex items-center justify-center mx-auto"
+                  )}>
+                    {formatDayNumber(date)}
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  {dayTasks.map((task) => (
+                    <TaskCard
+                      key={task.id}
+                      task={task}
+                      onToggleComplete={onToggleComplete}
+                      compact
+                      className="animate-slide-in"
+                    />
+                  ))}
+                  {dayTasks.length === 0 && (
+                    <div className="text-center py-4 text-muted-foreground text-xs">
+                      No tasks
+                    </div>
+                  )}
+                </div>
+              </Card>
+            );
+          })}
+        </div>
+
+        {/* Tasks without due date */}
+        {tasksWithoutDueDate.length > 0 && (
+          <Card className="p-4">
+            <h3 className="text-sm font-medium mb-3 text-muted-foreground">
+              Unscheduled Tasks ({tasksWithoutDueDate.length})
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+              {tasksWithoutDueDate.map((task) => (
+                <TaskCard
+                  key={task.id}
+                  task={task}
+                  onToggleComplete={onToggleComplete}
+                  compact
+                  className="animate-slide-in"
+                />
+              ))}
+            </div>
+          </Card>
+        )}
+      </div>
+    );
+  }
+
   return (
     <div className={cn("space-y-6", className)}>
       {renderHeader("Task Board")}
