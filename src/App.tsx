@@ -5,14 +5,14 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
+import Tasks from "./pages/Tasks";
 import Chat from "./pages/Chat";
-import Orchestration from "./pages/Orchestration";
-import Analytics from "./pages/Analytics";
 import Integrations from "./pages/Integrations";
-import Connectivity from "./pages/Connectivity";
+import Privacy from "./pages/Privacy";
+import Themes from "./pages/Themes";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
-import Navigation from "./components/Navigation";
+import { AppSidebar } from "./components/AppSidebar";
 import FloatingAIChat from "./components/FloatingAIChat";
 
 const queryClient = new QueryClient();
@@ -23,18 +23,22 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Navigation />
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/chat" element={<Chat />} />
-          <Route path="/orchestration" element={<Orchestration />} />
-          <Route path="/analytics" element={<Analytics />} />
-          <Route path="/integrations" element={<Integrations />} />
-          <Route path="/connectivity" element={<Connectivity />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <div className="flex min-h-screen w-full">
+          <AppSidebar />
+          <main className="flex-1 md:ml-56 mt-14 md:mt-0 transition-all duration-300">
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/tasks" element={<Tasks />} />
+              <Route path="/chat" element={<Chat />} />
+              <Route path="/integrations" element={<Integrations />} />
+              <Route path="/privacy" element={<Privacy />} />
+              <Route path="/themes" element={<Themes />} />
+              <Route path="/settings" element={<Settings />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </main>
+        </div>
         <FloatingAIChat />
       </BrowserRouter>
     </TooltipProvider>

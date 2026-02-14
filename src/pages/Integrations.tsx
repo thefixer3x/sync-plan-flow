@@ -1,170 +1,107 @@
+import { useState } from "react";
+import { Calendar, Database, Users, Code, Globe, Music, Zap, CheckCircle, Mail, CreditCard } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
+import { useToast } from "@/hooks/use-toast";
+
 const Integrations = () => {
+  const [connections, setConnections] = useState<Record<string, boolean>>({
+    googleCalendar: false,
+    notion: false,
+    slack: false,
+    trello: false,
+    spotify: false,
+    github: false,
+    gmail: false,
+    stripe: false,
+  });
+  const { toast } = useToast();
+
+  const integrations = [
+    { id: "googleCalendar", name: "Google Calendar", description: "Sync events and manage schedules", icon: Calendar, category: "Productivity" },
+    { id: "notion", name: "Notion", description: "Access databases and sync notes", icon: Database, category: "Productivity" },
+    { id: "slack", name: "Slack", description: "Send messages and team updates", icon: Users, category: "Communication" },
+    { id: "trello", name: "Trello", description: "Manage boards and track progress", icon: Zap, category: "Productivity" },
+    { id: "gmail", name: "Gmail", description: "Parse emails into tasks and reminders", icon: Mail, category: "Communication" },
+    { id: "github", name: "GitHub", description: "Track issues and code activity", icon: Code, category: "Development" },
+    { id: "spotify", name: "Spotify", description: "Mood-based focus music", icon: Music, category: "Lifestyle" },
+    { id: "stripe", name: "Stripe", description: "Track payments and invoices", icon: CreditCard, category: "Finance" },
+  ];
+
+  const handleToggle = (id: string) => {
+    const wasConnected = connections[id];
+    setConnections((prev) => ({ ...prev, [id]: !prev[id] }));
+    toast({
+      title: wasConnected ? "Disconnected" : "Connected",
+      description: `${integrations.find((i) => i.id === id)?.name} has been ${wasConnected ? "disconnected" : "connected"}.`,
+    });
+  };
+
+  const categories = [...new Set(integrations.map((i) => i.category))];
+
   return (
-    <div className="min-h-screen bg-background p-8">
-      <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl font-bold mb-8">Integrations & Connections</h1>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          <div className="border border-border p-6 rounded-lg">
-            <h3 className="text-xl font-semibold mb-4">Calendar Services</h3>
-            <div className="space-y-3">
-              <div className="flex justify-between items-center">
-                <span>Google Calendar</span>
-                <span className="w-3 h-3 bg-green-500 rounded-full"></span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span>Outlook Calendar</span>
-                <span className="w-3 h-3 bg-gray-400 rounded-full"></span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span>Apple Calendar</span>
-                <span className="w-3 h-3 bg-gray-400 rounded-full"></span>
-              </div>
-            </div>
-          </div>
-
-          <div className="border border-border p-6 rounded-lg">
-            <h3 className="text-xl font-semibold mb-4">Communication</h3>
-            <div className="space-y-3">
-              <div className="flex justify-between items-center">
-                <span>Gmail</span>
-                <span className="w-3 h-3 bg-green-500 rounded-full"></span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span>Slack</span>
-                <span className="w-3 h-3 bg-green-500 rounded-full"></span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span>Microsoft Teams</span>
-                <span className="w-3 h-3 bg-gray-400 rounded-full"></span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span>WhatsApp Business</span>
-                <span className="w-3 h-3 bg-gray-400 rounded-full"></span>
-              </div>
-            </div>
-          </div>
-
-          <div className="border border-border p-6 rounded-lg">
-            <h3 className="text-xl font-semibold mb-4">Financial</h3>
-            <div className="space-y-3">
-              <div className="flex justify-between items-center">
-                <span>Bank Account (HSBC)</span>
-                <span className="w-3 h-3 bg-green-500 rounded-full"></span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span>PayPal</span>
-                <span className="w-3 h-3 bg-gray-400 rounded-full"></span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span>Stripe</span>
-                <span className="w-3 h-3 bg-gray-400 rounded-full"></span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-          <div className="border border-border p-6 rounded-lg">
-            <h3 className="text-xl font-semibold mb-4">Productivity Tools</h3>
-            <div className="space-y-3">
-              <div className="flex justify-between items-center p-3 border border-border rounded">
-                <div>
-                  <p className="font-medium">Notion</p>
-                  <p className="text-sm text-muted-foreground">Import databases & create tasks</p>
-                </div>
-                <button className="bg-primary text-primary-foreground px-3 py-1 rounded text-sm">Connect</button>
-              </div>
-              <div className="flex justify-between items-center p-3 border border-border rounded">
-                <div>
-                  <p className="font-medium">Trello</p>
-                  <p className="text-sm text-muted-foreground">Sync boards & cards</p>
-                </div>
-                <button className="bg-primary text-primary-foreground px-3 py-1 rounded text-sm">Connect</button>
-              </div>
-              <div className="flex justify-between items-center p-3 border border-border rounded">
-                <div>
-                  <p className="font-medium">Todoist</p>
-                  <p className="text-sm text-muted-foreground">Import existing tasks</p>
-                </div>
-                <button className="bg-primary text-primary-foreground px-3 py-1 rounded text-sm">Connect</button>
-              </div>
-            </div>
-          </div>
-
-          <div className="border border-border p-6 rounded-lg">
-            <h3 className="text-xl font-semibold mb-4">Health & Fitness</h3>
-            <div className="space-y-3">
-              <div className="flex justify-between items-center p-3 border border-border rounded">
-                <div>
-                  <p className="font-medium">Apple Health</p>
-                  <p className="text-sm text-muted-foreground">Track activity & sleep</p>
-                </div>
-                <button className="bg-primary text-primary-foreground px-3 py-1 rounded text-sm">Connect</button>
-              </div>
-              <div className="flex justify-between items-center p-3 border border-border rounded">
-                <div>
-                  <p className="font-medium">Fitbit</p>
-                  <p className="text-sm text-muted-foreground">Monitor fitness goals</p>
-                </div>
-                <button className="bg-primary text-primary-foreground px-3 py-1 rounded text-sm">Connect</button>
-              </div>
-              <div className="flex justify-between items-center p-3 border border-border rounded">
-                <div>
-                  <p className="font-medium">MyFitnessPal</p>
-                  <p className="text-sm text-muted-foreground">Nutrition tracking</p>
-                </div>
-                <button className="bg-primary text-primary-foreground px-3 py-1 rounded text-sm">Connect</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="border border-border p-6 rounded-lg">
-          <h3 className="text-xl font-semibold mb-4">Custom AI Agent Configuration</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <h4 className="font-medium mb-3">Bring Your Own Keys</h4>
-              <div className="space-y-3">
-                <div>
-                  <label className="text-sm font-medium">OpenAI API Key</label>
-                  <input type="password" placeholder="sk-..." className="w-full border border-border rounded px-3 py-2 mt-1" />
-                </div>
-                <div>
-                  <label className="text-sm font-medium">Anthropic API Key</label>
-                  <input type="password" placeholder="Optional" className="w-full border border-border rounded px-3 py-2 mt-1" />
-                </div>
-                <div>
-                  <label className="text-sm font-medium">Google AI API Key</label>
-                  <input type="password" placeholder="Optional" className="w-full border border-border rounded px-3 py-2 mt-1" />
-                </div>
-              </div>
-            </div>
-            
-            <div>
-              <h4 className="font-medium mb-3">AI Agent Settings</h4>
-              <div className="space-y-3">
-                <div className="flex justify-between items-center">
-                  <span className="text-sm">Proactive Notifications</span>
-                  <input type="checkbox" checked className="rounded" />
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm">Voice Responses</span>
-                  <input type="checkbox" checked className="rounded" />
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm">Learning Mode</span>
-                  <input type="checkbox" checked className="rounded" />
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm">Auto-scheduling</span>
-                  <input type="checkbox" className="rounded" />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+    <div className="p-6 md:p-8 max-w-5xl mx-auto space-y-8">
+      <div>
+        <h1 className="text-2xl font-bold">Integrations</h1>
+        <p className="text-muted-foreground text-sm">
+          Connect your existing apps. Don't dump them — enhance them with AI.
+        </p>
       </div>
+
+      {categories.map((category) => (
+        <div key={category} className="space-y-4">
+          <h2 className="text-lg font-semibold text-muted-foreground">{category}</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {integrations
+              .filter((i) => i.category === category)
+              .map((integration) => {
+                const Icon = integration.icon;
+                const connected = connections[integration.id];
+                return (
+                  <Card key={integration.id} className="hover:border-primary/20 transition-colors">
+                    <CardHeader className="pb-3">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                            <Icon className="h-5 w-5 text-primary" />
+                          </div>
+                          <div>
+                            <CardTitle className="text-sm">{integration.name}</CardTitle>
+                            <Badge variant="outline" className="text-xs mt-0.5">{integration.category}</Badge>
+                          </div>
+                        </div>
+                        <Switch checked={connected} onCheckedChange={() => handleToggle(integration.id)} />
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <CardDescription className="text-xs">{integration.description}</CardDescription>
+                      {connected && (
+                        <div className="flex items-center gap-1.5 mt-3 text-green-600">
+                          <CheckCircle className="h-3.5 w-3.5" />
+                          <span className="text-xs font-medium">Connected</span>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                );
+              })}
+          </div>
+        </div>
+      ))}
+
+      {/* Coming Soon */}
+      <Card className="border-dashed">
+        <CardContent className="p-8 text-center space-y-3">
+          <Globe className="h-8 w-8 text-muted-foreground mx-auto" />
+          <h3 className="font-semibold">More Integrations Coming Soon</h3>
+          <p className="text-sm text-muted-foreground max-w-md mx-auto">
+            Apple Health, Fitbit, Microsoft Teams, WhatsApp Business, and 6,000+ apps via Zapier webhooks.
+          </p>
+          <Badge variant="secondary">Coming Soon</Badge>
+        </CardContent>
+      </Card>
     </div>
   );
 };
