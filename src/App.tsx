@@ -12,6 +12,9 @@ import Privacy from "./pages/Privacy";
 import Themes from "./pages/Themes";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
+import Personalities from "./pages/Personalities";
+import Memory from "./pages/Memory";
+import Social from "./pages/Social";
 import { AppSidebar } from "./components/AppSidebar";
 import FloatingAIChat from "./components/FloatingAIChat";
 
@@ -34,6 +37,9 @@ const App = () => (
               <Route path="/integrations" element={<Integrations />} />
               <Route path="/privacy" element={<Privacy />} />
               <Route path="/themes" element={<Themes />} />
+              <Route path="/personalities" element={<Personalities />} />
+              <Route path="/memory" element={<Memory />} />
+              <Route path="/social" element={<Social />} />
               <Route path="/settings" element={<Settings />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
