@@ -1,6 +1,6 @@
 import { 
   Home, MessageSquare, LayoutDashboard, CheckSquare, 
-  Plug, Shield, Palette, Settings, Menu
+  Plug, Shield, Palette, Settings, Menu, Bot, Brain, Users
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
@@ -12,9 +12,12 @@ const navItems = [
   { path: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { path: "/tasks", label: "Tasks", icon: CheckSquare },
   { path: "/chat", label: "AI Chat", icon: MessageSquare },
+  { path: "/social", label: "Social", icon: Users },
+  { path: "/personalities", label: "AI Personalities", icon: Bot },
+  { path: "/memory", label: "Memory", icon: Brain },
   { path: "/integrations", label: "Integrations", icon: Plug },
-  { path: "/privacy", label: "Privacy", icon: Shield },
   { path: "/themes", label: "Themes", icon: Palette },
+  { path: "/privacy", label: "Privacy", icon: Shield },
   { path: "/settings", label: "Settings", icon: Settings },
 ];
 
