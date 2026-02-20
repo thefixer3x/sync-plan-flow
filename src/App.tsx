@@ -29,12 +29,24 @@ const Social = lazy(() => import("./pages/Social"));
 
 const queryClient = new QueryClient();
 
-// Register service worker
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("/sw.js").catch(() => {/* ignore */});
-  });
+// Register service worker only if user opted in
+async function maybeRegisterSW() {
+  if (!("serviceWorker" in navigator)) return;
+  try {
+    const { getSetting } = await import("@/store/db");
+    const enabled = await getSetting<boolean>("offlineMode", false);
+    if (enabled) {
+      navigator.serviceWorker.register("/sw.js").catch(() => {});
+    } else {
+      // Unregister if previously registered but now disabled
+      const reg = await navigator.serviceWorker.getRegistration();
+      if (reg) await reg.unregister();
+    }
+  } catch {
+    // DB not ready yet, skip
+  }
 }
+window.addEventListener("load", () => maybeRegisterSW());
 
 function PageLoader() {
   return (
