@@ -1,11 +1,12 @@
-import { useState } from "react";
-import { Settings as SettingsIcon, Bell, Palette, Moon, Sun, Monitor, Zap, Accessibility } from "lucide-react";
+import { useState, useEffect, useCallback } from "react";
+import { Settings as SettingsIcon, Bell, Palette, Moon, Sun, Monitor, Zap, Accessibility, Wifi, WifiOff, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { useAppContext } from "@/contexts/AppContext";
+import { getSetting, setSetting } from "@/store/db";
 
 const Settings = () => {
   const [theme, setTheme] = useState("system");
@@ -14,8 +15,43 @@ const Settings = () => {
     push: true,
     desktop: true,
   });
+  const [offlineMode, setOfflineMode] = useState(false);
   const { reduceMotion, setReduceMotion } = useAppContext();
   const { toast } = useToast();
+
+  useEffect(() => {
+    getSetting<boolean>("offlineMode", false).then(setOfflineMode);
+  }, []);
+
+  const handleOfflineToggle = useCallback(async (enabled: boolean) => {
+    setOfflineMode(enabled);
+    await setSetting("offlineMode", enabled);
+    if ("serviceWorker" in navigator) {
+      if (enabled) {
+        navigator.serviceWorker.register("/sw.js").catch(() => {});
+        toast({ title: "Offline mode enabled", description: "App will cache for offline use." });
+      } else {
+        const reg = await navigator.serviceWorker.getRegistration();
+        if (reg) await reg.unregister();
+        toast({ title: "Offline mode disabled", description: "Service worker unregistered." });
+      }
+    }
+  }, [toast]);
+
+  const handleResetCache = useCallback(async () => {
+    try {
+      if ("serviceWorker" in navigator) {
+        const reg = await navigator.serviceWorker.getRegistration();
+        if (reg) await reg.unregister();
+      }
+      const keys = await caches.keys();
+      await Promise.all(keys.map((k) => caches.delete(k)));
+      toast({ title: "Cache cleared", description: "Reloading…" });
+      setTimeout(() => window.location.reload(), 500);
+    } catch {
+      toast({ title: "Error", description: "Could not clear cache.", variant: "destructive" });
+    }
+  }, [toast]);
 
   const handleSave = () => {
     toast({
@@ -143,6 +179,30 @@ const Settings = () => {
               />
             </div>
           ))}
+        </CardContent>
+      </Card>
+
+      {/* Offline / PWA */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base flex items-center gap-2">
+            {offlineMode ? <Wifi className="h-4 w-4" /> : <WifiOff className="h-4 w-4" />}
+            Offline &amp; PWA
+          </CardTitle>
+          <CardDescription>Control service worker and offline caching</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium">Offline Mode</p>
+              <p className="text-xs text-muted-foreground">Enable service worker for offline use</p>
+            </div>
+            <Switch checked={offlineMode} onCheckedChange={handleOfflineToggle} />
+          </div>
+          <Button variant="outline" size="sm" className="gap-2" onClick={handleResetCache}>
+            <Trash2 className="h-3.5 w-3.5" />
+            Reset Offline Cache
+          </Button>
         </CardContent>
       </Card>
 

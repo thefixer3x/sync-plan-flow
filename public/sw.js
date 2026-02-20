@@ -1,26 +1,22 @@
 /**
- * Service Worker – offline-first app shell caching.
- * Caches the SPA shell and static assets; falls back gracefully.
+ * Service Worker – network-first for HTML/JS/CSS, cache-first only for static assets.
+ * Versioned cache with aggressive old-cache cleanup.
  */
-const CACHE_NAME = "taskflow-v1";
+const CACHE_VERSION = "taskflow-v2";
 
-const SHELL_ASSETS = [
-  "/",
-  "/index.html",
-  "/manifest.json",
-];
+const SHELL_ASSETS = ["/", "/index.html", "/manifest.json"];
 
-// ── Install: cache shell ──────────────────────────────────────────────────────
+// ── Install: cache shell, skip waiting immediately ───────────────────────────
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches
-      .open(CACHE_NAME)
+      .open(CACHE_VERSION)
       .then((cache) => cache.addAll(SHELL_ASSETS))
       .then(() => self.skipWaiting())
   );
 });
 
-// ── Activate: purge old caches ────────────────────────────────────────────────
+// ── Activate: purge ALL old caches, claim clients ─────────────────────────────
 self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches
@@ -28,7 +24,7 @@ self.addEventListener("activate", (event) => {
       .then((keys) =>
         Promise.all(
           keys
-            .filter((k) => k !== CACHE_NAME)
+            .filter((k) => k !== CACHE_VERSION)
             .map((k) => caches.delete(k))
         )
       )
@@ -36,43 +32,48 @@ self.addEventListener("activate", (event) => {
   );
 });
 
-// ── Fetch: network-first for navigations, cache-first for assets ──────────────
+// ── Fetch strategy ────────────────────────────────────────────────────────────
 self.addEventListener("fetch", (event) => {
   const { request } = event;
   const url = new URL(request.url);
 
-  // Skip non-GET or cross-origin requests
   if (request.method !== "GET" || url.origin !== location.origin) return;
 
-  // Navigation: network-first, fallback to cached index.html (SPA shell)
-  if (request.mode === "navigate") {
+  // Images & fonts → cache-first
+  if (/\.(png|jpg|jpeg|gif|webp|svg|ico|woff2?|ttf|otf|eot)$/i.test(url.pathname)) {
     event.respondWith(
-      fetch(request)
-        .then((res) => {
-          const clone = res.clone();
-          caches.open(CACHE_NAME).then((c) => c.put(request, clone));
+      caches.match(request).then((cached) => {
+        if (cached) return cached;
+        return fetch(request).then((res) => {
+          if (res.ok) {
+            const clone = res.clone();
+            caches.open(CACHE_VERSION).then((c) => c.put(request, clone));
+          }
           return res;
-        })
-        .catch(() =>
-          caches
-            .match("/index.html")
-            .then((cached) => cached || new Response("Offline", { status: 503 }))
-        )
+        });
+      })
     );
     return;
   }
 
-  // Static assets: cache-first
+  // Everything else (HTML, JS, CSS) → network-first
   event.respondWith(
-    caches.match(request).then((cached) => {
-      if (cached) return cached;
-      return fetch(request).then((res) => {
+    fetch(request)
+      .then((res) => {
         if (res.ok) {
           const clone = res.clone();
-          caches.open(CACHE_NAME).then((c) => c.put(request, clone));
+          caches.open(CACHE_VERSION).then((c) => c.put(request, clone));
         }
         return res;
-      });
-    })
+      })
+      .catch(() =>
+        caches.match(request).then(
+          (cached) =>
+            cached ||
+            (request.mode === "navigate"
+              ? caches.match("/index.html")
+              : Promise.resolve(new Response("Offline", { status: 503 })))
+        )
+      )
   );
 });
