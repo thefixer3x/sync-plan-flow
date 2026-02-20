@@ -9,7 +9,12 @@
       "mcp__pica__get_pica_action_knowledge",
       "mcp___21st-dev_magic__21st_magic_component_builder",
       "Bash(npm run dev:*)",
-      "Bash(bun:*)"
+      "Bash(bun:*)",
+      "Bash(vps health:*)",
+      "Bash(vps test:*)",
+      "Bash(nmap:*)",
+      "mcp__Context7__resolve-library-id",
+      "Bash(curl:*)"
     ],
     "deny": []
   }

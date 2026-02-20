@@ -47,6 +47,7 @@ import {
   Eye,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useVoice } from "@/hooks/useVoice";
 
 // Voice Visualizer Component
 const VoiceVisualizer = ({ isListening }: { isListening: boolean }) => {
@@ -287,34 +288,99 @@ const NeuralNetworkViz = () => {
 
 // Main Bella Interface Component
 const BellaAIInterface = () => {
-  const [isListening, setIsListening] = useState(false);
-  const [isProcessing, setIsProcessing] = useState(false);
   const [currentMode, setCurrentMode] = useState<"voice" | "command" | "analytics">("voice");
   const [inputValue, setInputValue] = useState("");
   const [showSettings, setShowSettings] = useState(false);
   const [voiceEnabled, setVoiceEnabled] = useState(true);
+  const [conversation, setConversation] = useState<Array<{role: 'user' | 'assistant', content: string}>>([]);
   const [suggestions] = useState([
     "Optimize my schedule for maximum productivity",
-    "Analyze my work patterns and suggest improvements",
+    "Analyze my work patterns and suggest improvements", 
     "Create a strategic plan for my next project",
     "Summarize today's key insights and learnings"
   ]);
 
-  const handleVoiceToggle = () => {
-    setIsListening(!isListening);
-    if (!isListening) {
-      setIsProcessing(true);
-      setTimeout(() => setIsProcessing(false), 2000);
+  // Real voice integration
+  const {
+    isListening,
+    isSpeaking,
+    isProcessing,
+    transcript,
+    error: voiceError,
+    startListening,
+    stopListening,
+    speak,
+    toggle: toggleVoice,
+    reset: resetVoice,
+    updateConfig
+  } = useVoice({
+    // Configure with environment variables or fallback to browser APIs
+    elevenLabsApiKey: process.env.ELEVENLABS_API_KEY,
+    openaiApiKey: process.env.OPENAI_API_KEY,
+    voice: 'Bella', // Perfect for our AI assistant!
+    onTranscript: (text, isFinal) => {
+      if (isFinal && text.trim()) {
+        handleVoiceCommand(text);
+      }
+    },
+    onError: (error) => {
+      console.error('Voice error:', error);
+    }
+  });
+
+  // Handle voice commands from speech recognition
+  const handleVoiceCommand = async (command: string) => {
+    try {
+      // Add user message to conversation
+      setConversation(prev => [...prev, { role: 'user', content: command }]);
+      
+      // Process the command with AI (placeholder for now)
+      const response = await processAICommand(command);
+      
+      // Add AI response to conversation
+      setConversation(prev => [...prev, { role: 'assistant', content: response }]);
+      
+      // Speak the response if voice is enabled
+      if (voiceEnabled) {
+        await speak(response);
+      }
+    } catch (error) {
+      console.error('Failed to process voice command:', error);
     }
   };
 
-  const handleSendMessage = () => {
+  // Placeholder AI command processor (replace with actual AI integration)
+  const processAICommand = async (command: string): Promise<string> => {
+    // This would integrate with your AI service (OpenAI, Claude, etc.)
+    const responses = {
+      'schedule': "I've analyzed your calendar and found the optimal time blocks for deep work. I recommend scheduling your most important tasks between 10-11 AM when your productivity peaks.",
+      'productivity': "Your productivity score is 94% today! You've completed 24 tasks and maintained excellent focus. I suggest taking a 15-minute break to sustain this momentum.",
+      'tasks': "You have 3 high-priority tasks remaining: Review quarterly budget, Client presentation prep, and Team sync. I recommend tackling the budget review first while your energy is high.",
+      'insights': "Today's key insight: You're 23% more productive when you batch similar tasks together. Consider grouping all your communication tasks for tomorrow afternoon."
+    };
+    
+    const lowerCommand = command.toLowerCase();
+    for (const [key, response] of Object.entries(responses)) {
+      if (lowerCommand.includes(key)) {
+        return response;
+      }
+    }
+    
+    return "I understand you said: '" + command + "'. I'm ready to help optimize your productivity. What would you like me to focus on?";
+  };
+
+  const handleVoiceToggle = async () => {
+    try {
+      await toggleVoice();
+    } catch (error) {
+      console.error('Voice toggle failed:', error);
+    }
+  };
+
+  const handleSendMessage = async () => {
     if (inputValue.trim()) {
-      setIsProcessing(true);
-      setTimeout(() => {
-        setIsProcessing(false);
-        setInputValue("");
-      }, 1500);
+      await handleVoiceCommand(inputValue);
+      setInputValue("");
     }
   };
 
@@ -491,21 +557,51 @@ const BellaAIInterface = () => {
                 </motion.div>
 
                 <h2 className="text-xl font-semibold mb-2">
-                  {isProcessing ? "Processing..." : isListening ? "Listening..." : "Ready to assist"}
+                  {isProcessing ? "Processing..." : 
+                   isSpeaking ? "Speaking..." :
+                   isListening ? "Listening..." : "Ready to assist"}
                 </h2>
                 <p className="text-gray-400 text-sm">
                   {isProcessing 
                     ? "Analyzing your request with advanced AI" 
-                    : isListening 
-                      ? "Speak naturally, I'm listening" 
-                      : "Tap to start voice interaction"
+                    : isSpeaking
+                      ? "Bella is responding to your request"
+                      : isListening 
+                        ? "Speak naturally, I'm listening" 
+                        : "Tap to start voice interaction or type below"
                   }
                 </p>
               </div>
 
               {/* Voice Visualizer */}
               <div className="mb-6">
-                <VoiceVisualizer isListening={isListening} />
+                <VoiceVisualizer isListening={isListening || isSpeaking} />
+                
+                {/* Live Transcript Display */}
+                {transcript && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mt-4 p-3 bg-blue-500/10 rounded-lg border border-blue-500/20"
+                  >
+                    <p className="text-sm text-blue-300">
+                      {isProcessing ? "Processing..." : transcript}
+                    </p>
+                  </motion.div>
+                )}
+                
+                {/* Voice Error Display */}
+                {voiceError && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mt-4 p-3 bg-red-500/10 rounded-lg border border-red-500/20"
+                  >
+                    <p className="text-sm text-red-300">
+                      Voice Error: {voiceError}
+                    </p>
+                  </motion.div>
+                )}
               </div>
 
               {/* Text Input Alternative */}
@@ -541,6 +637,42 @@ const BellaAIInterface = () => {
             <div className="bg-gray-800/30 backdrop-blur-lg rounded-2xl p-6 border border-gray-700/50">
               <AICommandCenter />
             </div>
+
+            {/* Conversation History */}
+            {conversation.length > 0 && (
+              <div className="bg-gray-800/30 backdrop-blur-lg rounded-2xl p-6 border border-gray-700/50">
+                <div className="flex items-center gap-2 mb-4">
+                  <MessageSquare className="w-5 h-5 text-green-400" />
+                  <h3 className="text-lg font-semibold">Conversation</h3>
+                </div>
+                <div className="space-y-3 max-h-64 overflow-y-auto">
+                  {conversation.slice(-3).map((msg, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className={`p-3 rounded-lg ${
+                        msg.role === 'user' 
+                          ? 'bg-blue-500/10 border-l-4 border-blue-500' 
+                          : 'bg-green-500/10 border-l-4 border-green-500'
+                      }`}
+                    >
+                      <div className="flex items-center gap-2 mb-1">
+                        {msg.role === 'user' ? (
+                          <User className="w-4 h-4 text-blue-400" />
+                        ) : (
+                          <Brain className="w-4 h-4 text-green-400" />
+                        )}
+                        <span className="text-xs font-medium text-gray-300">
+                          {msg.role === 'user' ? 'You' : 'Bella'}
+                        </span>
+                      </div>
+                      <p className="text-sm text-gray-200">{msg.content}</p>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Neural Network Visualization */}
             <div className="bg-gray-800/30 backdrop-blur-lg rounded-2xl p-6 border border-gray-700/50">
