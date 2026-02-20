@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { Settings as SettingsIcon, Bell, Palette, Moon, Sun, Monitor, Zap } from "lucide-react";
+import { Settings as SettingsIcon, Bell, Palette, Moon, Sun, Monitor, Zap, Accessibility } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
+import { useAppContext } from "@/contexts/AppContext";
 
 const Settings = () => {
   const [theme, setTheme] = useState("system");
@@ -13,6 +14,7 @@ const Settings = () => {
     push: true,
     desktop: true,
   });
+  const { reduceMotion, setReduceMotion } = useAppContext();
   const { toast } = useToast();
 
   const handleSave = () => {
@@ -90,7 +92,26 @@ const Settings = () => {
               <p className="text-sm font-medium">Reduce animations</p>
               <p className="text-xs text-muted-foreground">Minimize motion for accessibility</p>
             </div>
-            <Switch />
+            <Switch checked={reduceMotion} onCheckedChange={setReduceMotion} />
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Accessibility */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base flex items-center gap-2">
+            <Accessibility className="h-4 w-4" />
+            Accessibility
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium">Reduce Motion</p>
+              <p className="text-xs text-muted-foreground">Disables all animations &amp; transitions globally</p>
+            </div>
+            <Switch checked={reduceMotion} onCheckedChange={setReduceMotion} />
           </div>
         </CardContent>
       </Card>
