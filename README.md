@@ -92,31 +92,68 @@ Recommended workflow:
 
 ---
 
-## Supabase: Schema Isolation (Recommended)
+## Supabase: Schema Isolation
 
-This Supabase project contains many existing tables, so this app should live in its own schema to avoid collisions.
+This Supabase project (`ptnrwrgzrsbocgxlpvhd`) hosts tables for multiple applications.  To avoid naming collisions and keep concerns separated, Sync Plan Flow uses its own Postgres schema: **`spf`**.
 
-**Suggested schema:** `spf`
+### Why schema isolation?
 
-### 1) Create schema + clone tables
+- **No collisions** – tables like `tasks` or `feature_flags` won't conflict with identically-named tables in `public` belonging to other apps.
+- **Clean RLS boundaries** – policies are scoped to the schema, so you can tighten or relax access without affecting other apps.
+- **Easier cleanup** – dropping or resetting the schema removes only this app's data.
 
-Use Supabase SQL Editor or migrations to:
+### Tables in `spf`
 
-- `create schema spf;`
-- clone tables into `spf.tasks`, `spf.sub_tasks`, etc.
-- enable RLS + policies
+| Table | Purpose |
+|---|---|
+| `tasks` | Core task records |
+| `sub_tasks` | Checklist items within a task |
+| `task_dependencies` | Blocked-by relationships |
+| `task_priorities` | Reference: priority levels |
+| `task_statuses` | Reference: status labels |
+| `user_preferences` | Per-user settings (has `user_id` → RLS enforced) |
+| `feature_flags` | App-level feature toggles |
 
-### 2) Expose schema in Supabase
+### 1) Expose the schema in Supabase (required)
 
-Supabase Dashboard → **Settings → API → Exposed schemas**
-Add: `spf`
+> **Supabase Dashboard → Settings → API → Exposed schemas → add `spf`**
 
-### 3) Query schema in supabase-js
+Without this step, PostgREST will not serve the schema and client queries will return 404.
+
+### 2) Run migrations
+
+Migrations live in `supabase/migrations/`.  Apply them in order:
+
+```bash
+# Option A: Supabase CLI (recommended)
+supabase db push
+
+# Option B: paste into Supabase SQL Editor manually
+# 1. 20260221000000_create_spf_schema.sql   – creates schema + tables + RLS
+# 2. 20260221000001_seed_spf_from_public.sql – (optional, commented) copies existing rows
+```
+
+The seed migration is fully commented out.  Uncomment only the statements you need, replacing placeholder values (`YOUR_PROJECT_ID`, `YOUR_USER_ID`) with real IDs.
+
+### 3) Query the schema in code
 
 ```ts
-const db = supabase.schema("spf");
+import { db } from "@/integrations/supabase/client";
+
+// All data queries go through the schema-scoped client
 const { data, error } = await db.from("tasks").select("*");
+
+// Auth operations still use the base client
+import { supabase } from "@/integrations/supabase/client";
+await supabase.auth.signInWithPassword({ email, password });
 ```
+
+### Running migrations safely
+
+- Always back up before running destructive migrations.
+- Migrations are additive — they create new objects and never modify `public`.
+- Test in a Supabase branch or staging project first when possible.
+- After running, verify with: `SELECT table_name FROM information_schema.tables WHERE table_schema = 'spf';`
 
 ---
 
