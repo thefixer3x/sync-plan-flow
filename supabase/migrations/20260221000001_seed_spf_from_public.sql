@@ -1,50 +1,56 @@
 -- =============================================================================
--- Migration: Copy existing rows from public into spf (OPTIONAL)
+-- Migration: Seed spf from control_room (OPTIONAL)
 -- =============================================================================
 -- This migration is COMMENTED OUT by default.  Uncomment the statements you
--- need once you're ready to seed the spf schema with existing data.
+-- need once you're ready to backfill the spf schema from existing data.
 --
--- If your tables have a project_id column, only rows matching the target
--- project are copied.  Otherwise all rows are copied.
+-- SOURCE: control_room (NOT public) – the task tables live in control_room on
+-- this shared Supabase instance, not in the public schema.
+--
+-- IMPORTANT: Always use explicit column lists (never SELECT *) so this script
+-- remains stable if the source table gains or reorders columns in the future.
 -- =============================================================================
 
 -- ── Reference data (small, safe to copy in full) ────────────────────────────
+-- Skip if migration 20260221000000 already seeded sensible defaults.
 
 -- INSERT INTO spf.task_priorities (id, name, description)
---   SELECT id, name, description FROM public.task_priorities;
+--   SELECT id, name, description
+--   FROM control_room.task_priorities;
 
--- INSERT INTO spf.task_statuses
---   SELECT * FROM public.task_statuses;
+-- INSERT INTO spf.task_statuses (id, name, description)
+--   SELECT id, name, description
+--   FROM control_room.task_statuses;
 
 -- ── Feature flags (copy all – no user/project scope) ────────────────────────
 
--- INSERT INTO spf.feature_flags
---   SELECT * FROM public.feature_flags;
+-- INSERT INTO spf.feature_flags (name, enabled, rollout_pct, description, created_at, updated_at)
+--   SELECT name, enabled,
+--          COALESCE(rollout_pct, 0),
+--          description, created_at, updated_at
+--   FROM control_room.feature_flags;
 
--- ── Tasks (filter by project_id if applicable) ──────────────────────────────
+-- ── Tasks (filter by project_id) ─────────────────────────────────────────────
 -- Replace 'YOUR_PROJECT_ID' with the actual project UUID.
 
 -- INSERT INTO spf.tasks
---   SELECT * FROM public.tasks
+--       (id, title, description, project_id,
+--        status_id, priority_id, assignee_id, due_date, created_at, updated_at)
+--   SELECT id, title, description, project_id,
+--          status_id, priority_id, assignee_id, due_date, created_at, updated_at
+--   FROM control_room.tasks
 --   WHERE project_id = 'YOUR_PROJECT_ID';
 
--- INSERT INTO spf.sub_tasks
---   SELECT * FROM public.sub_tasks
+-- INSERT INTO spf.sub_tasks (id, task_id, title, completed, created_at)
+--   SELECT id, task_id, title, completed, created_at
+--   FROM control_room.sub_tasks
 --   WHERE task_id IN (
---     SELECT id FROM public.tasks WHERE project_id = 'YOUR_PROJECT_ID'
+--     SELECT id FROM control_room.tasks WHERE project_id = 'YOUR_PROJECT_ID'
 --   );
 
--- INSERT INTO spf.task_dependencies
---   SELECT * FROM public.task_dependencies
+-- INSERT INTO spf.task_dependencies (id, task_id, depends_on_task_id, created_at)
+--   SELECT id, task_id, depends_on_task_id, created_at
+--   FROM control_room.task_dependencies
 --   WHERE task_id IN (
---     SELECT id FROM public.tasks WHERE project_id = 'YOUR_PROJECT_ID'
+--     SELECT id FROM control_room.tasks WHERE project_id = 'YOUR_PROJECT_ID'
 --   );
-
--- ── User preferences (filter by user_id if needed) ─────────────────────────
-
--- INSERT INTO spf.user_preferences
---   SELECT * FROM public.user_preferences;
--- Or filter:
--- INSERT INTO spf.user_preferences
---   SELECT * FROM public.user_preferences
---   WHERE user_id = 'YOUR_USER_ID';
