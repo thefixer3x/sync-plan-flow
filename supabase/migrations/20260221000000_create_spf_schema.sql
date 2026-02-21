@@ -46,8 +46,17 @@ CREATE TABLE spf.feature_flags    (LIKE public.feature_flags    INCLUDING ALL);
 
 -- 4. Grant explicit table-level permissions
 -- ---------------------------------------------------------------------------
+-- authenticated and service_role receive full DML on all tables;
+-- anon is intentionally restricted to SELECT on reference/public tables only
+-- (see per-table grants below) to align with the RLS policy intent.
 GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA spf
-  TO anon, authenticated, service_role;
+  TO authenticated, service_role;
+
+-- anon: SELECT-only on the three reference/read-only tables that have
+-- permissive read policies for anonymous users.
+GRANT SELECT ON TABLE spf.task_priorities TO anon;
+GRANT SELECT ON TABLE spf.task_statuses   TO anon;
+GRANT SELECT ON TABLE spf.feature_flags   TO anon;
 
 -- 5. Enable Row Level Security on every table
 -- ---------------------------------------------------------------------------
@@ -82,8 +91,20 @@ CREATE POLICY "Users can delete own preferences"
 
 -- 7. Open-access policies for tables without user_id
 -- ---------------------------------------------------------------------------
--- These are permissive until auth is fully wired up (Phase 3).
--- Tighten them once project_id or user ownership is enforced.
+-- TODO(PHASE-3): Narrow the USING (true) policies below once project ownership
+-- is enforced (add a project_id predicate or equivalent ownership check).
+-- Track: https://github.com/thefixer3x/sync-plan-flow/issues/60
+-- These are intentionally permissive for all authenticated users until
+-- project-level isolation is implemented in Phase 3.
+
+DO $$
+BEGIN
+  RAISE WARNING
+    'SPF MIGRATION: spf.tasks, spf.sub_tasks, and spf.task_dependencies have '
+    'permissive USING (true) RLS policies open to ALL authenticated users. '
+    'These MUST be narrowed in Phase 3 with project ownership predicates. '
+    'See TODO(PHASE-3) and https://github.com/thefixer3x/sync-plan-flow/issues/60';
+END $$;
 
 -- tasks: open to authenticated users for now
 CREATE POLICY "Authenticated users can select tasks"
