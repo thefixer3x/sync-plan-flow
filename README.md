@@ -1,73 +1,159 @@
-# Welcome to your Lovable project
+# Sync Plan Flow (AI Productivity Hub)
 
-## Project info
+An offline-first, ultra-modern task manager and productivity hub that helps you plan, execute, and measure — without forcing you to abandon the tools you already use.
 
-**URL**: https://lovable.dev/projects/3fa29564-bb90-4f71-a00b-b5ec48ce7b89
+**Core idea:** your AI is **triggered intelligently** (events → suggestions → approvals), not “always on.”
 
-## How can I edit this code?
+---
 
-There are several ways of editing your application.
+## What’s included
 
-**Use Lovable**
+### ✅ Task System (Local-first)
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/3fa29564-bb90-4f71-a00b-b5ec48ce7b89) and start prompting.
+- Task CRUD with persistence
+- Kanban + List views
+- Filters + quick add
+- Subtasks / checklists
+- Recurrence (daily/weekly/monthly)
+- Dependencies (blocked tasks)
+- Tags & categories
+- Keyboard shortcuts
 
-Changes made via Lovable will be committed automatically to this repo.
+### ✅ Productivity Layer
 
-**Use your preferred IDE**
+- Dashboard widgets (today’s tasks, quick wins, upcoming items)
+- Focus workflows (planned)
+- Suggestions engine (planned / Phase 2)
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### ✅ Personalization
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+- Theme presets + custom theme builder
+- Reduce Motion support (accessibility)
+- AI personality presets (Coach, Analyst, Zen, etc.)
+- Memory visualizer (local context bank)
+- Social productivity (accountability, goals, streaks)
 
-Follow these steps:
+### ✅ Privacy & Ownership
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+- Local-first storage and user control patterns
+- Clear “why am I seeing this?” style transparency (in progress)
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+### ✅ PWA / Offline (Phase 1+)
 
-# Step 3: Install the necessary dependencies.
-npm i
+- Installable PWA
+- Offline badge + offline-safe task management
+- Cache reset controls to prevent stale builds
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+---
+
+## Tech Stack
+
+- **Frontend:** React + TypeScript + Vite
+- **UI:** Tailwind + shadcn/ui
+- **Local persistence:** IndexedDB (Dexie / idb pattern)
+- **Backend (optional / staged):** Supabase (Postgres, Auth, RLS)
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (LTS recommended)
+- pnpm / npm / bun (choose one)
+
+### Install & run
+
+```bash
+# install
+npm install
+
+# dev
 npm run dev
+
+# build
+npm run build
+
+# preview
+npm run preview
 ```
 
-**Edit a file directly in GitHub**
+---
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## PWA Notes (Important)
 
-**Use GitHub Codespaces**
+During active development, service workers can cause stale cache issues.
+Use the in-app **Reset Offline Cache** action (Settings) if you ever see a blank screen after deploy.
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+Recommended workflow:
 
-## What technologies are used for this project?
+- Keep “Offline Mode / PWA” toggle OFF during heavy refactors
+- Enable it when testing install/offline behavior
 
-This project is built with:
+---
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## Supabase: Schema Isolation (Recommended)
 
-## How can I deploy this project?
+This Supabase project contains many existing tables, so this app should live in its own schema to avoid collisions.
 
-Simply open [Lovable](https://lovable.dev/projects/3fa29564-bb90-4f71-a00b-b5ec48ce7b89) and click on Share -> Publish.
+**Suggested schema:** `spf`
 
-## Can I connect a custom domain to my Lovable project?
+### 1) Create schema + clone tables
 
-Yes, you can!
+Use Supabase SQL Editor or migrations to:
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+- `create schema spf;`
+- clone tables into `spf.tasks`, `spf.sub_tasks`, etc.
+- enable RLS + policies
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+### 2) Expose schema in Supabase
+
+Supabase Dashboard → **Settings → API → Exposed schemas**
+Add: `spf`
+
+### 3) Query schema in supabase-js
+
+```ts
+const db = supabase.schema("spf");
+const { data, error } = await db.from("tasks").select("*");
+```
+
+---
+
+## Roadmap (High level)
+
+### Phase 1 — Cohesion + Modern Task Engine + Safe PWA
+
+- Unified state store
+- Task fundamentals (subtasks, recurrence, dependencies)
+- Reduce motion & design system lock
+- PWA hardening + cache reset
+
+### Phase 2 — Orchestration MVP
+
+- Event → trigger → suggestion → action loop
+- Focus mode + daily plan
+- Suggestions influenced by Memory + Personality
+- Feature flags for future integrations
+
+### Phase 3+ — Controlled rollout
+
+- Auth + RLS
+- Cloud sync (local-first → optional sync)
+- Calendar integration (read-only first)
+- Email → task ingestion (flagged)
+- Monetization/tier mapping (flagged)
+
+---
+
+## Contributing (internal)
+
+- Create feature branches per epic (`feat/...`, `fix/...`, `db/...`)
+- Keep migrations additive and reversible
+- Never disable RLS in production
+
+---
+
+## License
+
+TBD
