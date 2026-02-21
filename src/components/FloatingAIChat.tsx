@@ -4,12 +4,44 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
+
 interface Message {
   id: number;
   type: "ai" | "user";
   content: string;
   timestamp: Date;
 }
+
+interface SpeechRecognitionAlternativeLike {
+  transcript: string;
+}
+
+interface SpeechRecognitionResultLike {
+  [index: number]: SpeechRecognitionAlternativeLike;
+}
+
+interface SpeechRecognitionResultListLike {
+  [index: number]: SpeechRecognitionResultLike;
+}
+
+interface SpeechRecognitionEventLike {
+  results: SpeechRecognitionResultListLike;
+}
+
+interface WebkitSpeechRecognitionLike {
+  continuous: boolean;
+  interimResults: boolean;
+  lang: string;
+  onstart: (() => void) | null;
+  onresult: ((event: SpeechRecognitionEventLike) => void) | null;
+  onerror: (() => void) | null;
+  start: () => void;
+}
+
+interface WindowWithWebkitSpeechRecognition extends Window {
+  webkitSpeechRecognition?: new () => WebkitSpeechRecognitionLike;
+}
+
 const FloatingAIChat = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isListening, setIsListening] = useState(false);
@@ -63,8 +95,9 @@ const FloatingAIChat = () => {
     setIsListening(!isListening);
     if (!isListening) {
       // Start voice recognition
-      if ('webkitSpeechRecognition' in window) {
-        const recognition = new (window as any).webkitSpeechRecognition();
+      const speechWindow = window as WindowWithWebkitSpeechRecognition;
+      if (speechWindow.webkitSpeechRecognition) {
+        const recognition = new speechWindow.webkitSpeechRecognition();
         recognition.continuous = false;
         recognition.interimResults = false;
         recognition.lang = 'en-US';
@@ -74,7 +107,7 @@ const FloatingAIChat = () => {
             description: "Speak now, I'm listening!"
           });
         };
-        recognition.onresult = (event: any) => {
+        recognition.onresult = (event: SpeechRecognitionEventLike) => {
           const transcript = event.results[0][0].transcript;
           setMessage(transcript);
           setIsListening(false);
