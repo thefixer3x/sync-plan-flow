@@ -7,6 +7,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useToast } from "@/hooks/use-toast";
 import { useAppContext } from "@/contexts/AppContext";
 import { getSetting, setSetting } from "@/store/db";
+import {
+  canUseCacheStorage,
+  canUseServiceWorker,
+  registerVersionedServiceWorker,
+  unregisterAllServiceWorkers,
+} from "@/lib/serviceWorker";
 
 const Settings = () => {
   const [theme, setTheme] = useState("system");
@@ -26,13 +32,12 @@ const Settings = () => {
   const handleOfflineToggle = useCallback(async (enabled: boolean) => {
     setOfflineMode(enabled);
     await setSetting("offlineMode", enabled);
-    if ("serviceWorker" in navigator) {
+    if (canUseServiceWorker()) {
       if (enabled) {
-        navigator.serviceWorker.register("/sw.js").catch(() => {});
+        await registerVersionedServiceWorker();
         toast({ title: "Offline mode enabled", description: "App will cache for offline use." });
       } else {
-        const reg = await navigator.serviceWorker.getRegistration();
-        if (reg) await reg.unregister();
+        await unregisterAllServiceWorkers();
         toast({ title: "Offline mode disabled", description: "Service worker unregistered." });
       }
     }
@@ -40,12 +45,13 @@ const Settings = () => {
 
   const handleResetCache = useCallback(async () => {
     try {
-      if ("serviceWorker" in navigator) {
-        const reg = await navigator.serviceWorker.getRegistration();
-        if (reg) await reg.unregister();
+      if (canUseServiceWorker()) {
+        await unregisterAllServiceWorkers();
       }
-      const keys = await caches.keys();
-      await Promise.all(keys.map((k) => caches.delete(k)));
+      if (canUseCacheStorage()) {
+        const keys = await caches.keys();
+        await Promise.all(keys.map((k) => caches.delete(k)));
+      }
       toast({ title: "Cache cleared", description: "Reloading…" });
       setTimeout(() => window.location.reload(), 500);
     } catch {
@@ -197,9 +203,19 @@ const Settings = () => {
               <p className="text-sm font-medium">Offline Mode</p>
               <p className="text-xs text-muted-foreground">Enable service worker for offline use</p>
             </div>
-            <Switch checked={offlineMode} onCheckedChange={handleOfflineToggle} />
+            <Switch
+              checked={offlineMode}
+              onCheckedChange={handleOfflineToggle}
+              data-testid="offline-mode-switch"
+            />
           </div>
-          <Button variant="outline" size="sm" className="gap-2" onClick={handleResetCache}>
+          <Button
+            variant="outline"
+            size="sm"
+            className="gap-2"
+            onClick={handleResetCache}
+            data-testid="reset-offline-cache"
+          >
             <Trash2 className="h-3.5 w-3.5" />
             Reset Offline Cache
           </Button>

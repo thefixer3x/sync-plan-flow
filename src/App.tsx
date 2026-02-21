@@ -2,14 +2,21 @@ import { Suspense, lazy, useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { ToastAction } from "@/components/ui/toast";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AppProvider } from "@/contexts/AppContext";
+import { toast } from "@/hooks/use-toast";
 import { AppSidebar } from "./components/AppSidebar";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { OfflineBadge } from "./components/OfflineBadge";
 import { InstallBanner } from "./components/InstallBanner";
 import FloatingAIChat from "./components/FloatingAIChat";
+import {
+  canUseServiceWorker,
+  registerVersionedServiceWorker,
+  unregisterAllServiceWorkers,
+} from "@/lib/serviceWorker";
 
 // Eager pages (critical path)
 import Index from "./pages/Index";
@@ -31,22 +38,19 @@ const queryClient = new QueryClient();
 
 // Register service worker only if user opted in
 async function maybeRegisterSW() {
-  if (!("serviceWorker" in navigator)) return;
+  if (!canUseServiceWorker()) return;
   try {
     const { getSetting } = await import("@/store/db");
     const enabled = await getSetting<boolean>("offlineMode", false);
     if (enabled) {
-      navigator.serviceWorker.register("/sw.js").catch(() => {});
+      await registerVersionedServiceWorker();
     } else {
-      // Unregister if previously registered but now disabled
-      const reg = await navigator.serviceWorker.getRegistration();
-      if (reg) await reg.unregister();
+      await unregisterAllServiceWorkers();
     }
   } catch {
     // DB not ready yet, skip
   }
 }
-window.addEventListener("load", () => maybeRegisterSW());
 
 function PageLoader() {
   return (
@@ -56,41 +60,68 @@ function PageLoader() {
   );
 }
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <AppProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <OfflineBadge />
-          <InstallBanner />
-          <div className="flex min-h-screen w-full">
-            <AppSidebar />
-            <main className="flex-1 md:ml-56 mt-14 md:mt-0 transition-all duration-300 min-w-0">
-              <Suspense fallback={<PageLoader />}>
-                <Routes>
-                  <Route path="/" element={<ErrorBoundary><Index /></ErrorBoundary>} />
-                  <Route path="/dashboard" element={<ErrorBoundary><Dashboard /></ErrorBoundary>} />
-                  <Route path="/tasks" element={<ErrorBoundary><Tasks /></ErrorBoundary>} />
-                  <Route path="/chat" element={<ErrorBoundary><Chat /></ErrorBoundary>} />
-                  <Route path="/integrations" element={<ErrorBoundary><Integrations /></ErrorBoundary>} />
-                  <Route path="/privacy" element={<ErrorBoundary><Privacy /></ErrorBoundary>} />
-                  <Route path="/themes" element={<ErrorBoundary><Themes /></ErrorBoundary>} />
-                  <Route path="/personalities" element={<ErrorBoundary><Personalities /></ErrorBoundary>} />
-                  <Route path="/memory" element={<ErrorBoundary><Memory /></ErrorBoundary>} />
-                  <Route path="/social" element={<ErrorBoundary><Social /></ErrorBoundary>} />
-                  <Route path="/settings" element={<ErrorBoundary><Settings /></ErrorBoundary>} />
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </Suspense>
-            </main>
-          </div>
-          <FloatingAIChat />
-        </BrowserRouter>
-      </TooltipProvider>
-    </AppProvider>
-  </QueryClientProvider>
-);
+const App = () => {
+  useEffect(() => {
+    void maybeRegisterSW();
+  }, []);
+
+  useEffect(() => {
+    if (!canUseServiceWorker()) return;
+
+    const onControllerChange = () => {
+      toast({
+        title: "New version available",
+        description: "A new app build is ready. Refresh to use the latest version.",
+        action: (
+          <ToastAction altText="Refresh app" onClick={() => window.location.reload()}>
+            Refresh
+          </ToastAction>
+        ),
+      });
+    };
+
+    navigator.serviceWorker.addEventListener("controllerchange", onControllerChange);
+    return () => {
+      navigator.serviceWorker.removeEventListener("controllerchange", onControllerChange);
+    };
+  }, []);
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <AppProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <OfflineBadge />
+            <InstallBanner />
+            <div className="flex min-h-screen w-full">
+              <AppSidebar />
+              <main className="flex-1 md:ml-56 mt-14 md:mt-0 transition-all duration-300 min-w-0">
+                <Suspense fallback={<PageLoader />}>
+                  <Routes>
+                    <Route path="/" element={<ErrorBoundary><Index /></ErrorBoundary>} />
+                    <Route path="/dashboard" element={<ErrorBoundary><Dashboard /></ErrorBoundary>} />
+                    <Route path="/tasks" element={<ErrorBoundary><Tasks /></ErrorBoundary>} />
+                    <Route path="/chat" element={<ErrorBoundary><Chat /></ErrorBoundary>} />
+                    <Route path="/integrations" element={<ErrorBoundary><Integrations /></ErrorBoundary>} />
+                    <Route path="/privacy" element={<ErrorBoundary><Privacy /></ErrorBoundary>} />
+                    <Route path="/themes" element={<ErrorBoundary><Themes /></ErrorBoundary>} />
+                    <Route path="/personalities" element={<ErrorBoundary><Personalities /></ErrorBoundary>} />
+                    <Route path="/memory" element={<ErrorBoundary><Memory /></ErrorBoundary>} />
+                    <Route path="/social" element={<ErrorBoundary><Social /></ErrorBoundary>} />
+                    <Route path="/settings" element={<ErrorBoundary><Settings /></ErrorBoundary>} />
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </Suspense>
+              </main>
+            </div>
+            <FloatingAIChat />
+          </BrowserRouter>
+        </TooltipProvider>
+      </AppProvider>
+    </QueryClientProvider>
+  );
+};
 
 export default App;

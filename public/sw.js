@@ -1,8 +1,8 @@
 /**
  * Service Worker – network-first for HTML/JS/CSS, cache-first only for static assets.
- * Versioned cache with aggressive old-cache cleanup.
+ * Versioned cache is derived from the SW URL so each deploy gets a fresh namespace.
  */
-const CACHE_VERSION = "taskflow-v2";
+const CACHE_VERSION = "cache:" + self.location.href;
 
 const SHELL_ASSETS = ["/", "/index.html", "/manifest.json"];
 
