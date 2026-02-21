@@ -10,8 +10,8 @@
 
 -- ── Reference data (small, safe to copy in full) ────────────────────────────
 
--- INSERT INTO spf.task_priorities
---   SELECT * FROM public.task_priorities;
+-- INSERT INTO spf.task_priorities (id, name, description)
+--   SELECT id, name, description FROM public.task_priorities;
 
 -- INSERT INTO spf.task_statuses
 --   SELECT * FROM public.task_statuses;
