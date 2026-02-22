@@ -94,7 +94,7 @@ Recommended workflow:
 
 ## Supabase: Schema Isolation
 
-This Supabase project (`ptnrwrgzrsbocgxlpvhd`) hosts tables for multiple applications.  To avoid naming collisions and keep concerns separated, Sync Plan Flow uses its own Postgres schema: **`spf`**.
+This Supabase project hosts tables for multiple applications.  To avoid naming collisions and keep concerns separated, Sync Plan Flow uses its own Postgres schema: **`spf`**.
 
 ### Why schema isolation?
 
