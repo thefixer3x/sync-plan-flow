@@ -33,6 +33,8 @@ const Themes = lazy(() => import("./pages/Themes"));
 const Personalities = lazy(() => import("./pages/Personalities"));
 const Memory = lazy(() => import("./pages/Memory"));
 const Social = lazy(() => import("./pages/Social"));
+const Focus = lazy(() => import("./pages/Focus"));
+const Activity = lazy(() => import("./pages/Activity"));
 
 const queryClient = new QueryClient();
 
@@ -110,6 +112,8 @@ const App = () => {
                     <Route path="/personalities" element={<ErrorBoundary><Personalities /></ErrorBoundary>} />
                     <Route path="/memory" element={<ErrorBoundary><Memory /></ErrorBoundary>} />
                     <Route path="/social" element={<ErrorBoundary><Social /></ErrorBoundary>} />
+                    <Route path="/focus" element={<ErrorBoundary><Focus /></ErrorBoundary>} />
+                    <Route path="/activity" element={<ErrorBoundary><Activity /></ErrorBoundary>} />
                     <Route path="/settings" element={<ErrorBoundary><Settings /></ErrorBoundary>} />
                     <Route path="*" element={<NotFound />} />
                   </Routes>
