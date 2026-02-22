@@ -40,3 +40,5 @@ mcp_config*.sh
 *.njsproj
 *.sln
 *.sw?
+test-results/
+playwright-report/
