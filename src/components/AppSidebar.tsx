@@ -5,7 +5,7 @@ import {
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useSidebarState } from "@/contexts/SidebarContext";
 
 const navItems = [
   { path: "/", label: "Home", icon: Home },
@@ -25,8 +25,7 @@ const navItems = [
 
 export function AppSidebar() {
   const location = useLocation();
-  const [collapsed, setCollapsed] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const { collapsed, setCollapsed, mobileOpen, setMobileOpen } = useSidebarState();
 
   return (
     <>
