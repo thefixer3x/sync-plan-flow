@@ -39,7 +39,7 @@ const FEATURE_FLAG_DESCRIPTIONS: Record<FeatureFlagKey, string> = {
 
 async function mirrorFeatureFlags(flags: FeatureFlags): Promise<boolean> {
   try {
-    const { db: cloudDb } = await import("@/integrations/supabase/client");
+    const { spfDb } = await import("@/integrations/supabase/client");
     const payload = (Object.entries(flags) as [FeatureFlagKey, boolean][])
       .map(([name, enabled]) => ({
         name,
