@@ -1,5 +1,5 @@
 import { useCallback, useEffect } from "react";
-import { useLiveQuery } from "dexie-react-hooks";
+import { useIDBQuery } from "@/hooks/useIDBQuery";
 import {
   DEFAULT_PHASE2_ONBOARDING_PROGRESS,
   db,
@@ -12,6 +12,11 @@ import {
   type FeatureFlagKey,
   type FeatureFlags,
   type FocusSession,
+  type OrchestrationEvent,
+  type TriggerRule,
+  type Suggestion,
+  type ActionLog,
+  type SyncQueueItem,
   type SuggestionStatus,
   type Task,
 } from "@/store/db";
@@ -34,7 +39,7 @@ const FEATURE_FLAG_DESCRIPTIONS: Record<FeatureFlagKey, string> = {
 
 async function mirrorFeatureFlags(flags: FeatureFlags): Promise<boolean> {
   try {
-    const { db: cloudDb } = await import("@/integrations/supabase/client");
+    const { spfDb } = await import("@/integrations/supabase/client");
     const payload = (Object.entries(flags) as [FeatureFlagKey, boolean][])
       .map(([name, enabled]) => ({
         name,
@@ -42,7 +47,7 @@ async function mirrorFeatureFlags(flags: FeatureFlags): Promise<boolean> {
         rollout_pct: enabled ? 100 : 0,
         description: FEATURE_FLAG_DESCRIPTIONS[name],
       }));
-    const { error } = await cloudDb
+    const { error } = await spfDb
       .from("feature_flags")
       .upsert(payload, { onConflict: "name" });
     return !error;
@@ -56,46 +61,39 @@ export function usePhase2Store(tasks: Task[]) {
     seedPhase2Defaults().catch(console.error);
   }, []);
 
-  const triggerRules = useLiveQuery(
-    () => db.triggerRules.toArray(),
-    [],
+  const triggerRules = useIDBQuery<TriggerRule[]>(
+    () => db.getAll("triggerRules"),
     []
   );
 
-  const orchestrationEvents = useLiveQuery(
-    () => db.orchestrationEvents.orderBy("timestamp").reverse().limit(80).toArray(),
-    [],
+  const orchestrationEvents = useIDBQuery<OrchestrationEvent[]>(
+    () => db.getAll("orchestrationEvents"),
     []
   );
 
-  const suggestions = useLiveQuery(
-    () => db.suggestions.orderBy("createdAt").reverse().limit(80).toArray(),
-    [],
+  const suggestions = useIDBQuery<Suggestion[]>(
+    () => db.getAll("suggestions"),
     []
   );
 
-  const actionLogs = useLiveQuery(
-    () => db.actionLogs.orderBy("createdAt").reverse().limit(120).toArray(),
-    [],
+  const actionLogs = useIDBQuery<ActionLog[]>(
+    () => db.getAll("actionLogs"),
     []
   );
 
-  const focusSessions = useLiveQuery(
-    () => db.focusSessions.orderBy("startedAt").reverse().limit(50).toArray(),
-    [],
+  const focusSessions = useIDBQuery<FocusSession[]>(
+    () => db.getAll("focusSessions"),
     []
   );
 
-  const syncQueue = useLiveQuery(
-    () => db.syncQueue.orderBy("createdAt").reverse().limit(100).toArray(),
-    [],
+  const syncQueue = useIDBQuery<SyncQueueItem[]>(
+    () => db.getAll("syncQueue"),
     []
   );
 
-  const featureFlags = useLiveQuery(() => getFeatureFlags(), [], null);
-  const onboardingProgress = useLiveQuery(
+  const featureFlags = useIDBQuery(() => getFeatureFlags(), null as FeatureFlags | null);
+  const onboardingProgress = useIDBQuery(
     () => getPhase2OnboardingProgress(),
-    [],
     DEFAULT_PHASE2_ONBOARDING_PROGRESS
   );
 
@@ -104,20 +102,19 @@ export function usePhase2Store(tasks: Task[]) {
     const artifacts = buildOrchestrationArtifacts(tasks, triggerRules, personalityId);
 
     for (const event of artifacts.events) {
-      const existing = await db.orchestrationEvents.get(event.id);
+      const existing = await db.get<OrchestrationEvent>("orchestrationEvents", event.id);
       if (!existing) {
-        await db.orchestrationEvents.put(event);
+        await db.put("orchestrationEvents", event);
       }
     }
 
     for (const suggestion of artifacts.suggestions) {
-      const existing = await db.suggestions.get(suggestion.id);
+      const existing = await db.get<Suggestion>("suggestions", suggestion.id);
       if (!existing) {
-        await db.suggestions.put(suggestion);
+        await db.put("suggestions", suggestion);
         continue;
       }
-
-      await db.suggestions.put({
+      await db.put("suggestions", {
         ...suggestion,
         status: existing.status,
         createdAt: existing.createdAt,
@@ -127,11 +124,11 @@ export function usePhase2Store(tasks: Task[]) {
 
   const setSuggestionStatus = useCallback(
     async (suggestionId: string, status: SuggestionStatus) => {
-      const existing = await db.suggestions.get(suggestionId);
+      const existing = await db.get<Suggestion>("suggestions", suggestionId);
       if (!existing) return;
 
-      await db.suggestions.update(suggestionId, { status });
-      await db.actionLogs.add({
+      await db.update("suggestions", suggestionId, { status });
+      await db.add("actionLogs", {
         id: crypto.randomUUID(),
         suggestionId,
         outcome: status,
@@ -154,7 +151,7 @@ export function usePhase2Store(tasks: Task[]) {
   );
 
   const updateTriggerRule = useCallback(async (ruleId: string, enabled: boolean) => {
-    await db.triggerRules.update(ruleId, { enabled });
+    await db.update("triggerRules", ruleId, { enabled });
   }, []);
 
   const updateFeatureFlag = useCallback(async (key: FeatureFlagKey, enabled: boolean) => {
@@ -187,11 +184,11 @@ export function usePhase2Store(tasks: Task[]) {
   }, []);
 
   const addFocusSession = useCallback(async (session: FocusSession) => {
-    await db.focusSessions.put(session);
+    await db.put("focusSessions", session);
   }, []);
 
   const completeFocusSession = useCallback(async (id: string, status: FocusSession["status"]) => {
-    await db.focusSessions.update(id, {
+    await db.update("focusSessions", id, {
       status,
       endedAt: new Date().toISOString(),
     });
