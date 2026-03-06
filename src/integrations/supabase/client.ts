@@ -26,6 +26,7 @@ export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABL
 });
 
 // Schema-scoped client – use for all data reads/writes in the spf schema
-// import { db } from "@/integrations/supabase/client";
-// const { data } = await db.from("tasks").select("*");
-export const db = supabase.schema("spf");
+// import { spfDb } from "@/integrations/supabase/client";
+// const { data } = await spfDb.from("tasks").select("*");
+// @ts-ignore - spf schema exists in DB but not in generated types
+export const spfDb = supabase.schema("spf");
