@@ -6,8 +6,10 @@ import { ToastAction } from "@/components/ui/toast";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AppProvider } from "@/contexts/AppContext";
+import { SidebarProvider } from "@/contexts/SidebarContext";
 import { toast } from "@/hooks/use-toast";
 import { AppSidebar } from "./components/AppSidebar";
+import { SidebarAwareMain } from "./components/SidebarAwareMain";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { OfflineBadge } from "./components/OfflineBadge";
 import { InstallBanner } from "./components/InstallBanner";
@@ -95,32 +97,34 @@ const App = () => {
           <Toaster />
           <Sonner />
           <BrowserRouter>
-            <OfflineBadge />
-            <InstallBanner />
-            <div className="flex min-h-screen w-full">
-              <AppSidebar />
-              <main className="flex-1 md:ml-56 mt-14 md:mt-0 transition-all duration-300 min-w-0">
-                <Suspense fallback={<PageLoader />}>
-                  <Routes>
-                    <Route path="/" element={<ErrorBoundary><Index /></ErrorBoundary>} />
-                    <Route path="/dashboard" element={<ErrorBoundary><Dashboard /></ErrorBoundary>} />
-                    <Route path="/tasks" element={<ErrorBoundary><Tasks /></ErrorBoundary>} />
-                    <Route path="/chat" element={<ErrorBoundary><Chat /></ErrorBoundary>} />
-                    <Route path="/integrations" element={<ErrorBoundary><Integrations /></ErrorBoundary>} />
-                    <Route path="/privacy" element={<ErrorBoundary><Privacy /></ErrorBoundary>} />
-                    <Route path="/themes" element={<ErrorBoundary><Themes /></ErrorBoundary>} />
-                    <Route path="/personalities" element={<ErrorBoundary><Personalities /></ErrorBoundary>} />
-                    <Route path="/memory" element={<ErrorBoundary><Memory /></ErrorBoundary>} />
-                    <Route path="/social" element={<ErrorBoundary><Social /></ErrorBoundary>} />
-                    <Route path="/focus" element={<ErrorBoundary><Focus /></ErrorBoundary>} />
-                    <Route path="/activity" element={<ErrorBoundary><Activity /></ErrorBoundary>} />
-                    <Route path="/settings" element={<ErrorBoundary><Settings /></ErrorBoundary>} />
-                    <Route path="*" element={<NotFound />} />
-                  </Routes>
-                </Suspense>
-              </main>
-            </div>
-            <FloatingAIChat />
+            <SidebarProvider>
+              <OfflineBadge />
+              <InstallBanner />
+              <div className="flex min-h-screen w-full">
+                <AppSidebar />
+                <SidebarAwareMain>
+                  <Suspense fallback={<PageLoader />}>
+                    <Routes>
+                      <Route path="/" element={<ErrorBoundary><Index /></ErrorBoundary>} />
+                      <Route path="/dashboard" element={<ErrorBoundary><Dashboard /></ErrorBoundary>} />
+                      <Route path="/tasks" element={<ErrorBoundary><Tasks /></ErrorBoundary>} />
+                      <Route path="/chat" element={<ErrorBoundary><Chat /></ErrorBoundary>} />
+                      <Route path="/integrations" element={<ErrorBoundary><Integrations /></ErrorBoundary>} />
+                      <Route path="/privacy" element={<ErrorBoundary><Privacy /></ErrorBoundary>} />
+                      <Route path="/themes" element={<ErrorBoundary><Themes /></ErrorBoundary>} />
+                      <Route path="/personalities" element={<ErrorBoundary><Personalities /></ErrorBoundary>} />
+                      <Route path="/memory" element={<ErrorBoundary><Memory /></ErrorBoundary>} />
+                      <Route path="/social" element={<ErrorBoundary><Social /></ErrorBoundary>} />
+                      <Route path="/focus" element={<ErrorBoundary><Focus /></ErrorBoundary>} />
+                      <Route path="/activity" element={<ErrorBoundary><Activity /></ErrorBoundary>} />
+                      <Route path="/settings" element={<ErrorBoundary><Settings /></ErrorBoundary>} />
+                      <Route path="*" element={<NotFound />} />
+                    </Routes>
+                  </Suspense>
+                </SidebarAwareMain>
+              </div>
+              <FloatingAIChat />
+            </SidebarProvider>
           </BrowserRouter>
         </TooltipProvider>
       </AppProvider>
