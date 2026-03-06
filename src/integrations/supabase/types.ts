@@ -696,6 +696,7 @@ export type Database = {
       }
       api_keys: {
         Row: {
+          access_level: string | null
           created_at: string | null
           expires_at: string | null
           id: string | null
@@ -705,9 +706,11 @@ export type Database = {
           name: string | null
           organization_id: string | null
           permissions: Json | null
+          service: string | null
           user_id: string | null
         }
         Insert: {
+          access_level?: string | null
           created_at?: string | null
           expires_at?: string | null
           id?: string | null
@@ -717,9 +720,11 @@ export type Database = {
           name?: string | null
           organization_id?: string | null
           permissions?: Json | null
+          service?: string | null
           user_id?: string | null
         }
         Update: {
+          access_level?: string | null
           created_at?: string | null
           expires_at?: string | null
           id?: string | null
@@ -729,6 +734,7 @@ export type Database = {
           name?: string | null
           organization_id?: string | null
           permissions?: Json | null
+          service?: string | null
           user_id?: string | null
         }
         Relationships: []
