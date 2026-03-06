@@ -240,7 +240,7 @@ const Activity = () => {
             )}
             {orchestrationEvents.map((event) => (
               <div key={event.id} className="p-2 rounded-md border">
-                <p className="text-sm font-medium">{event.type.replaceAll("_", " ")}</p>
+                <p className="text-sm font-medium">{event.type.replace(/_/g, " ")}</p>
                 <p className="text-xs text-muted-foreground">
                   {new Date(event.timestamp).toLocaleString()}
                 </p>
