@@ -1,8 +1,11 @@
 /**
- * Unified Dexie (IndexedDB) store – single source of truth.
+ * Unified IDB store – single source of truth.
+ * Uses the `idb` library (clean TS types) instead of Dexie.
  * Schema is versioned so old data never breaks.
  */
-import Dexie, { type Table } from "dexie";
+import { openDB, type IDBPDatabase } from "idb";
+
+// ── Types ────────────────────────────────────────────────────────────────────
 
 export interface SubTask {
   id: string;
@@ -23,7 +26,6 @@ export interface Task {
   assignee?: string;
   estimatedTime?: number;
   completedAt?: string;
-  // Phase 1 extensions
   subTasks?: SubTask[];
   recurrence?: "none" | "daily" | "weekly" | "monthly";
   nextDueDate?: string;
@@ -94,6 +96,11 @@ export interface SyncQueueItem {
   createdAt: string;
 }
 
+export interface AppSettings {
+  key: string;
+  value: unknown;
+}
+
 export type FeatureFlagKey =
   | "calendar_sync"
   | "email_to_task"
@@ -126,52 +133,113 @@ export const DEFAULT_PHASE2_ONBOARDING_PROGRESS: Phase2OnboardingProgress = {
   dismissed: false,
 };
 
-export interface AppSettings {
-  key: string;
-  value: unknown;
-}
+// ── Database singleton ───────────────────────────────────────────────────────
 
-class AppDB extends Dexie {
-  tasks!: Table<Task, string>;
-  settings!: Table<AppSettings, string>;
-  orchestrationEvents!: Table<OrchestrationEvent, string>;
-  triggerRules!: Table<TriggerRule, string>;
-  suggestions!: Table<Suggestion, string>;
-  actionLogs!: Table<ActionLog, string>;
-  focusSessions!: Table<FocusSession, string>;
-  syncQueue!: Table<SyncQueueItem, string>;
+const DB_NAME = "ai-productivity-db";
+const DB_VERSION = 2;
 
-  constructor() {
-    super("ai-productivity-db");
+let _dbPromise: Promise<IDBPDatabase> | null = null;
 
-    this.version(1).stores({
-      tasks: "id, status, priority, category, dueDate",
-      settings: "key",
-    });
-
-    this.version(2).stores({
-      tasks: "id, status, priority, category, dueDate",
-      settings: "key",
-      orchestrationEvents: "id, type, timestamp, source",
-      triggerRules: "id, enabled",
-      suggestions: "id, status, createdAt, confidence",
-      actionLogs: "id, suggestionId, outcome, createdAt",
-      focusSessions: "id, startedAt, status",
-      syncQueue: "id, status, createdAt, type",
+function getDB(): Promise<IDBPDatabase> {
+  if (!_dbPromise) {
+    _dbPromise = openDB(DB_NAME, DB_VERSION, {
+      upgrade(database, oldVersion) {
+        // Version 1 stores
+        if (oldVersion < 1) {
+          database.createObjectStore("tasks", { keyPath: "id" });
+          database.createObjectStore("settings", { keyPath: "key" });
+        }
+        // Version 2 stores
+        if (oldVersion < 2) {
+          database.createObjectStore("orchestrationEvents", { keyPath: "id" });
+          database.createObjectStore("triggerRules", { keyPath: "id" });
+          database.createObjectStore("suggestions", { keyPath: "id" });
+          database.createObjectStore("actionLogs", { keyPath: "id" });
+          database.createObjectStore("focusSessions", { keyPath: "id" });
+          database.createObjectStore("syncQueue", { keyPath: "id" });
+        }
+      },
     });
   }
+  return _dbPromise;
 }
 
-export const db = new AppDB();
+// ── Change notification (simple event emitter for reactivity) ────────────────
 
-// ── Default seed tasks (only inserted once) ──────────────────────────────────
+type Listener = () => void;
+const listeners = new Set<Listener>();
+
+export function subscribe(fn: Listener): () => void {
+  listeners.add(fn);
+  return () => listeners.delete(fn);
+}
+
+function notify() {
+  listeners.forEach((fn) => fn());
+}
+
+// ── Generic store helpers ────────────────────────────────────────────────────
+
+export const db = {
+  async getAll<T>(store: string): Promise<T[]> {
+    const d = await getDB();
+    return d.getAll(store);
+  },
+  async get<T>(store: string, key: string): Promise<T | undefined> {
+    const d = await getDB();
+    return d.get(store, key);
+  },
+  async put<T>(store: string, value: T): Promise<void> {
+    const d = await getDB();
+    await d.put(store, value);
+    notify();
+  },
+  async add<T>(store: string, value: T): Promise<void> {
+    const d = await getDB();
+    await d.add(store, value);
+    notify();
+  },
+  async delete(store: string, key: string): Promise<void> {
+    const d = await getDB();
+    await d.delete(store, key);
+    notify();
+  },
+  async bulkPut<T>(store: string, values: T[]): Promise<void> {
+    const d = await getDB();
+    const tx = d.transaction(store, "readwrite");
+    for (const v of values) {
+      await tx.store.put(v);
+    }
+    await tx.done;
+    notify();
+  },
+  async bulkAdd<T>(store: string, values: T[]): Promise<void> {
+    const d = await getDB();
+    const tx = d.transaction(store, "readwrite");
+    for (const v of values) {
+      await tx.store.add(v);
+    }
+    await tx.done;
+    notify();
+  },
+  async update(store: string, key: string, updates: Record<string, unknown>): Promise<void> {
+    const d = await getDB();
+    const existing = await d.get(store, key);
+    if (!existing) return;
+    await d.put(store, { ...existing, ...updates });
+    notify();
+  },
+};
+
+// ── Default seed tasks ───────────────────────────────────────────────────────
+
 const SEED_KEY = "tasks-seeded-v1";
 const PHASE2_SEED_KEY = "phase2-seeded-v1";
 const FEATURE_FLAGS_KEY = "feature-flags-v1";
 const PHASE2_ONBOARDING_KEY = "phase2-onboarding-v1";
 
 export async function seedIfEmpty() {
-  const alreadySeeded = await db.settings.get(SEED_KEY);
+  const alreadySeeded = await db.get<AppSettings>("settings", SEED_KEY);
   if (alreadySeeded) return;
 
   const today = new Date().toISOString().split("T")[0];
@@ -235,26 +303,24 @@ export async function seedIfEmpty() {
     },
   ];
 
-  await db.tasks.bulkAdd(seeds);
-  await db.settings.put({ key: SEED_KEY, value: true });
+  await db.bulkAdd("tasks", seeds);
+  await db.put("settings", { key: SEED_KEY, value: true });
 }
 
-// ── Settings helpers ──────────────────────────────────────────────────────────
+// ── Settings helpers ─────────────────────────────────────────────────────────
+
 export async function getSetting<T>(key: string, fallback: T): Promise<T> {
-  const row = await db.settings.get(key);
+  const row = await db.get<AppSettings>("settings", key);
   return row ? (row.value as T) : fallback;
 }
 
 export async function setSetting<T>(key: string, value: T): Promise<void> {
-  await db.settings.put({ key, value });
+  await db.put("settings", { key, value });
 }
 
 export async function getFeatureFlags(): Promise<FeatureFlags> {
   const stored = await getSetting<Partial<FeatureFlags>>(FEATURE_FLAGS_KEY, {});
-  return {
-    ...DEFAULT_FEATURE_FLAGS,
-    ...stored,
-  };
+  return { ...DEFAULT_FEATURE_FLAGS, ...stored };
 }
 
 export async function setFeatureFlag(key: FeatureFlagKey, enabled: boolean): Promise<void> {
@@ -264,10 +330,7 @@ export async function setFeatureFlag(key: FeatureFlagKey, enabled: boolean): Pro
 
 export async function getPhase2OnboardingProgress(): Promise<Phase2OnboardingProgress> {
   const stored = await getSetting<Partial<Phase2OnboardingProgress>>(PHASE2_ONBOARDING_KEY, {});
-  return {
-    ...DEFAULT_PHASE2_ONBOARDING_PROGRESS,
-    ...stored,
-  };
+  return { ...DEFAULT_PHASE2_ONBOARDING_PROGRESS, ...stored };
 }
 
 export async function updatePhase2OnboardingProgress(
@@ -286,7 +349,7 @@ export async function enqueueSyncAction(
   type: string,
   payload: Record<string, unknown>
 ): Promise<void> {
-  await db.syncQueue.add({
+  await db.add("syncQueue", {
     id: crypto.randomUUID(),
     type,
     payload,
@@ -299,11 +362,11 @@ export async function markSyncQueueItem(
   id: string,
   status: SyncQueueItem["status"]
 ): Promise<void> {
-  await db.syncQueue.update(id, { status });
+  await db.update("syncQueue", id, { status });
 }
 
 export async function seedPhase2Defaults(): Promise<void> {
-  const alreadySeeded = await db.settings.get(PHASE2_SEED_KEY);
+  const alreadySeeded = await db.get<AppSettings>("settings", PHASE2_SEED_KEY);
   if (alreadySeeded) return;
 
   const rules: TriggerRule[] = [
@@ -337,8 +400,8 @@ export async function seedPhase2Defaults(): Promise<void> {
     },
   ];
 
-  await db.triggerRules.bulkPut(rules);
+  await db.bulkPut("triggerRules", rules);
   await setSetting(FEATURE_FLAGS_KEY, DEFAULT_FEATURE_FLAGS);
   await setSetting(PHASE2_ONBOARDING_KEY, DEFAULT_PHASE2_ONBOARDING_PROGRESS);
-  await db.settings.put({ key: PHASE2_SEED_KEY, value: true });
+  await db.put("settings", { key: PHASE2_SEED_KEY, value: true });
 }
