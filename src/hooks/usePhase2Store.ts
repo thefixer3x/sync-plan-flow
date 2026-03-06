@@ -47,7 +47,7 @@ async function mirrorFeatureFlags(flags: FeatureFlags): Promise<boolean> {
         rollout_pct: enabled ? 100 : 0,
         description: FEATURE_FLAG_DESCRIPTIONS[name],
       }));
-    const { error } = await cloudDb
+    const { error } = await spfDb
       .from("feature_flags")
       .upsert(payload, { onConflict: "name" });
     return !error;
