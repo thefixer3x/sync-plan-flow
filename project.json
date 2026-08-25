@@ -1,0 +1,28 @@
+
+{
+  "name": "sync-plan-flow",
+  "$schema": "../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/sync-plan-flow",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cd apps/sync-plan-flow && bun run dev"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cd apps/sync-plan-flow && bun run build"
+      }
+    },
+    "start": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cd apps/sync-plan-flow && bun run start"
+      }
+    }
+  }
+}
