@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import { Filter, Calendar, Flag, Folder } from "lucide-react";
+import { Filter, Calendar, Flag, Folder, Lock } from "lucide-react";
 
 interface TaskFilterProps {
   activeFilter: string;
@@ -12,47 +12,50 @@ interface TaskFilterProps {
     today: number;
     high: number;
     work: number;
+    blocked: number;
   };
   className?: string;
 }
 
 const filters = [
-  { id: "all", label: "All Tasks", icon: Filter, color: "text-foreground" },
-  { id: "today", label: "Due Today", icon: Calendar, color: "text-accent" },
-  { id: "high", label: "High Priority", icon: Flag, color: "text-destructive" },
-  { id: "work", label: "Work", icon: Folder, color: "text-warning" },
+  { id: "all", label: "All Tasks", icon: Filter },
+  { id: "today", label: "Due Today", icon: Calendar },
+  { id: "high", label: "High Priority", icon: Flag },
+  { id: "work", label: "Work", icon: Folder },
+  { id: "blocked", label: "Blocked", icon: Lock },
 ];
 
 export function TaskFilter({ activeFilter, onFilterChange, taskCounts, className }: TaskFilterProps) {
   return (
-    <Card className={cn("modern-card", className)}>
-      <CardContent className="p-4">
-        <h3 className="font-semibold mb-3 text-foreground/90">Filters</h3>
-        
-        <div className="space-y-1">
+    <Card className={cn(className)}>
+      <CardContent className="p-3">
+        <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2 px-1">
+          Filters
+        </p>
+        <div className="space-y-0.5">
           {filters.map((filter) => {
             const Icon = filter.icon;
-            const count = taskCounts[filter.id as keyof typeof taskCounts] || 0;
+            const count = taskCounts[filter.id as keyof typeof taskCounts] ?? 0;
             const isActive = activeFilter === filter.id;
-            
             return (
               <Button
                 key={filter.id}
-                variant={isActive ? "secondary" : "ghost"}
+                variant="ghost"
                 onClick={() => onFilterChange(filter.id)}
                 className={cn(
-                  "w-full justify-between h-auto py-3 px-3 transition-all duration-fast",
-                  isActive && "bg-primary/10 border-primary/20 border"
+                  "w-full justify-between h-9 px-3 text-sm font-normal rounded-lg transition-colors",
+                  isActive
+                    ? "bg-primary/10 text-primary font-medium"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted"
                 )}
               >
-                <div className="flex items-center gap-3">
-                  <Icon className={cn("h-4 w-4", filter.color)} />
-                  <span className="text-sm font-medium">{filter.label}</span>
+                <div className="flex items-center gap-2.5">
+                  <Icon className="h-3.5 w-3.5" />
+                  <span>{filter.label}</span>
                 </div>
-                
-                <Badge 
-                  variant={isActive ? "default" : "secondary"} 
-                  className="h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs"
+                <Badge
+                  variant={isActive ? "default" : "secondary"}
+                  className="h-5 min-w-[20px] rounded-full px-1.5 text-xs"
                 >
                   {count}
                 </Badge>
