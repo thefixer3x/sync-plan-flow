@@ -10,7 +10,7 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "14.1"
+    PostgrestVersion: "14.18"
   }
   public: {
     Tables: {
@@ -71,6 +71,51 @@ export type Database = {
           transaction_fee_percent?: number | null
           transfers_enabled?: boolean | null
           wallet_enabled?: boolean | null
+        }
+        Relationships: []
+      }
+      discord_identity_links: {
+        Row: {
+          created_at: string
+          default_project_scope: string
+          discord_user_id: string
+          guild_id: string
+          id: string
+          lanonasis_user_id: string | null
+          link_token_expires_at: string | null
+          link_token_hash: string | null
+          link_token_used_at: string | null
+          organization_id: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          default_project_scope?: string
+          discord_user_id: string
+          guild_id: string
+          id?: string
+          lanonasis_user_id?: string | null
+          link_token_expires_at?: string | null
+          link_token_hash?: string | null
+          link_token_used_at?: string | null
+          organization_id?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          default_project_scope?: string
+          discord_user_id?: string
+          guild_id?: string
+          id?: string
+          lanonasis_user_id?: string | null
+          link_token_expires_at?: string | null
+          link_token_hash?: string | null
+          link_token_used_at?: string | null
+          organization_id?: string | null
+          status?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -305,6 +350,51 @@ export type Database = {
           project_scope?: string | null
           role?: string | null
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      slack_identity_links: {
+        Row: {
+          created_at: string
+          default_project_scope: string
+          id: string
+          lanonasis_user_id: string | null
+          link_token_expires_at: string | null
+          link_token_hash: string | null
+          link_token_used_at: string | null
+          organization_id: string | null
+          slack_user_id: string
+          status: string
+          team_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          default_project_scope?: string
+          id?: string
+          lanonasis_user_id?: string | null
+          link_token_expires_at?: string | null
+          link_token_hash?: string | null
+          link_token_used_at?: string | null
+          organization_id?: string | null
+          slack_user_id: string
+          status?: string
+          team_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          default_project_scope?: string
+          id?: string
+          lanonasis_user_id?: string | null
+          link_token_expires_at?: string | null
+          link_token_hash?: string | null
+          link_token_used_at?: string | null
+          organization_id?: string | null
+          slack_user_id?: string
+          status?: string
+          team_id?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -1114,6 +1204,126 @@ export type Database = {
         }
         Relationships: []
       }
+      customer_interactions: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          customer_id: string | null
+          description: string | null
+          follow_up_date: string | null
+          id: string | null
+          interaction_type: string | null
+          is_completed: boolean | null
+          outcome: string | null
+          subject: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          customer_id?: string | null
+          description?: string | null
+          follow_up_date?: string | null
+          id?: string | null
+          interaction_type?: string | null
+          is_completed?: boolean | null
+          outcome?: string | null
+          subject?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          customer_id?: string | null
+          description?: string | null
+          follow_up_date?: string | null
+          id?: string | null
+          interaction_type?: string | null
+          is_completed?: boolean | null
+          outcome?: string | null
+          subject?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      customers: {
+        Row: {
+          billing_address: string | null
+          company_name: string | null
+          created_at: string | null
+          credit_limit: number | null
+          current_balance: number | null
+          customer_name: string | null
+          customer_profile_id: string | null
+          customer_type: string | null
+          email: string | null
+          first_purchase_date: string | null
+          id: string | null
+          last_order_date: string | null
+          lifetime_value: number | null
+          notes: string | null
+          phone: string | null
+          preferred_payment_method: string | null
+          shipping_address: string | null
+          status: string | null
+          tax_id: string | null
+          total_orders: number | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          billing_address?: string | null
+          company_name?: string | null
+          created_at?: string | null
+          credit_limit?: number | null
+          current_balance?: number | null
+          customer_name?: string | null
+          customer_profile_id?: string | null
+          customer_type?: string | null
+          email?: string | null
+          first_purchase_date?: string | null
+          id?: string | null
+          last_order_date?: string | null
+          lifetime_value?: number | null
+          notes?: string | null
+          phone?: string | null
+          preferred_payment_method?: string | null
+          shipping_address?: string | null
+          status?: string | null
+          tax_id?: string | null
+          total_orders?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          billing_address?: string | null
+          company_name?: string | null
+          created_at?: string | null
+          credit_limit?: number | null
+          current_balance?: number | null
+          customer_name?: string | null
+          customer_profile_id?: string | null
+          customer_type?: string | null
+          email?: string | null
+          first_purchase_date?: string | null
+          id?: string | null
+          last_order_date?: string | null
+          lifetime_value?: number | null
+          notes?: string | null
+          phone?: string | null
+          preferred_payment_method?: string | null
+          shipping_address?: string | null
+          status?: string | null
+          tax_id?: string | null
+          total_orders?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       edoc_consents: {
         Row: {
           account_name: string | null
@@ -1378,6 +1588,270 @@ export type Database = {
           name?: string | null
           rollout_pct?: number | null
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      inventory_adjustments: {
+        Row: {
+          adjustment_type: string | null
+          created_at: string | null
+          created_by: string | null
+          id: string | null
+          inventory_item_id: string | null
+          new_quantity: number | null
+          notes: string | null
+          previous_quantity: number | null
+          quantity_change: number | null
+          reason: string | null
+          reference_id: string | null
+          total_value: number | null
+          unit_cost: number | null
+          user_id: string | null
+        }
+        Insert: {
+          adjustment_type?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          id?: string | null
+          inventory_item_id?: string | null
+          new_quantity?: number | null
+          notes?: string | null
+          previous_quantity?: number | null
+          quantity_change?: number | null
+          reason?: string | null
+          reference_id?: string | null
+          total_value?: number | null
+          unit_cost?: number | null
+          user_id?: string | null
+        }
+        Update: {
+          adjustment_type?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          id?: string | null
+          inventory_item_id?: string | null
+          new_quantity?: number | null
+          notes?: string | null
+          previous_quantity?: number | null
+          quantity_change?: number | null
+          reason?: string | null
+          reference_id?: string | null
+          total_value?: number | null
+          unit_cost?: number | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      inventory_items: {
+        Row: {
+          barcode: string | null
+          created_at: string | null
+          id: string | null
+          last_restocked_at: string | null
+          location: string | null
+          product_id: string | null
+          reorder_point: number | null
+          reorder_quantity: number | null
+          sku: string | null
+          stock_quantity: number | null
+          supplier_contact: string | null
+          supplier_name: string | null
+          unit_cost: number | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          barcode?: string | null
+          created_at?: string | null
+          id?: string | null
+          last_restocked_at?: string | null
+          location?: string | null
+          product_id?: string | null
+          reorder_point?: number | null
+          reorder_quantity?: number | null
+          sku?: string | null
+          stock_quantity?: number | null
+          supplier_contact?: string | null
+          supplier_name?: string | null
+          unit_cost?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          barcode?: string | null
+          created_at?: string | null
+          id?: string | null
+          last_restocked_at?: string | null
+          location?: string | null
+          product_id?: string | null
+          reorder_point?: number | null
+          reorder_quantity?: number | null
+          sku?: string | null
+          stock_quantity?: number | null
+          supplier_contact?: string | null
+          supplier_name?: string | null
+          unit_cost?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      invoice_items: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          discount_percentage: number | null
+          id: string | null
+          invoice_id: string | null
+          line_total: number | null
+          product_id: string | null
+          quantity: number | null
+          sort_order: number | null
+          tax_rate: number | null
+          unit_price: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          discount_percentage?: number | null
+          id?: string | null
+          invoice_id?: string | null
+          line_total?: number | null
+          product_id?: string | null
+          quantity?: number | null
+          sort_order?: number | null
+          tax_rate?: number | null
+          unit_price?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          discount_percentage?: number | null
+          id?: string | null
+          invoice_id?: string | null
+          line_total?: number | null
+          product_id?: string | null
+          quantity?: number | null
+          sort_order?: number | null
+          tax_rate?: number | null
+          unit_price?: number | null
+        }
+        Relationships: []
+      }
+      invoice_payments: {
+        Row: {
+          amount: number | null
+          created_at: string | null
+          id: string | null
+          invoice_id: string | null
+          notes: string | null
+          payment_date: string | null
+          payment_method: string | null
+          reference_number: string | null
+          user_id: string | null
+        }
+        Insert: {
+          amount?: number | null
+          created_at?: string | null
+          id?: string | null
+          invoice_id?: string | null
+          notes?: string | null
+          payment_date?: string | null
+          payment_method?: string | null
+          reference_number?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          amount?: number | null
+          created_at?: string | null
+          id?: string | null
+          invoice_id?: string | null
+          notes?: string | null
+          payment_date?: string | null
+          payment_method?: string | null
+          reference_number?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      invoices: {
+        Row: {
+          amount_paid: number | null
+          balance_due: number | null
+          created_at: string | null
+          currency_code: string | null
+          customer_id: string | null
+          discount_amount: number | null
+          due_date: string | null
+          footer_text: string | null
+          id: string | null
+          invoice_date: string | null
+          invoice_number: string | null
+          notes: string | null
+          paid_at: string | null
+          payment_terms: string | null
+          sent_at: string | null
+          shipping_cost: number | null
+          status: string | null
+          subtotal: number | null
+          tax_amount: number | null
+          tax_rate: number | null
+          terms_and_conditions: string | null
+          total_amount: number | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          amount_paid?: number | null
+          balance_due?: number | null
+          created_at?: string | null
+          currency_code?: string | null
+          customer_id?: string | null
+          discount_amount?: number | null
+          due_date?: string | null
+          footer_text?: string | null
+          id?: string | null
+          invoice_date?: string | null
+          invoice_number?: string | null
+          notes?: string | null
+          paid_at?: string | null
+          payment_terms?: string | null
+          sent_at?: string | null
+          shipping_cost?: number | null
+          status?: string | null
+          subtotal?: number | null
+          tax_amount?: number | null
+          tax_rate?: number | null
+          terms_and_conditions?: string | null
+          total_amount?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          amount_paid?: number | null
+          balance_due?: number | null
+          created_at?: string | null
+          currency_code?: string | null
+          customer_id?: string | null
+          discount_amount?: number | null
+          due_date?: string | null
+          footer_text?: string | null
+          id?: string | null
+          invoice_date?: string | null
+          invoice_number?: string | null
+          notes?: string | null
+          paid_at?: string | null
+          payment_terms?: string | null
+          sent_at?: string | null
+          shipping_cost?: number | null
+          status?: string | null
+          subtotal?: number | null
+          tax_amount?: number | null
+          tax_rate?: number | null
+          terms_and_conditions?: string | null
+          total_amount?: number | null
+          updated_at?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -2674,6 +3148,42 @@ export type Database = {
         }
         Relationships: []
       }
+      stock_alerts: {
+        Row: {
+          alert_type: string | null
+          created_at: string | null
+          current_quantity: number | null
+          id: string | null
+          inventory_item_id: string | null
+          is_resolved: boolean | null
+          resolved_at: string | null
+          threshold_quantity: number | null
+          user_id: string | null
+        }
+        Insert: {
+          alert_type?: string | null
+          created_at?: string | null
+          current_quantity?: number | null
+          id?: string | null
+          inventory_item_id?: string | null
+          is_resolved?: boolean | null
+          resolved_at?: string | null
+          threshold_quantity?: number | null
+          user_id?: string | null
+        }
+        Update: {
+          alert_type?: string | null
+          created_at?: string | null
+          current_quantity?: number | null
+          id?: string | null
+          inventory_item_id?: string | null
+          is_resolved?: boolean | null
+          resolved_at?: string | null
+          threshold_quantity?: number | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       stored_api_keys: {
         Row: {
           access_level:
@@ -2704,7 +3214,13 @@ export type Database = {
           organization_id: string | null
           project_id: string | null
           rotation_frequency: number | null
-          status: "default" | "valid" | "invalid" | "expired" | null
+          status:
+            | "active"
+            | "rotating"
+            | "deprecated"
+            | "expired"
+            | "compromised"
+            | null
           tags: string[] | null
           updated_at: string | null
           usage_count: number | null
@@ -2738,7 +3254,13 @@ export type Database = {
           organization_id?: string | null
           project_id?: string | null
           rotation_frequency?: number | null
-          status?: "default" | "valid" | "invalid" | "expired" | null
+          status?:
+            | "active"
+            | "rotating"
+            | "deprecated"
+            | "expired"
+            | "compromised"
+            | null
           tags?: string[] | null
           updated_at?: string | null
           usage_count?: number | null
@@ -2772,7 +3294,13 @@ export type Database = {
           organization_id?: string | null
           project_id?: string | null
           rotation_frequency?: number | null
-          status?: "default" | "valid" | "invalid" | "expired" | null
+          status?:
+            | "active"
+            | "rotating"
+            | "deprecated"
+            | "expired"
+            | "compromised"
+            | null
           tags?: string[] | null
           updated_at?: string | null
           usage_count?: number | null
@@ -3825,6 +4353,17 @@ export type Database = {
       }
     }
     Functions: {
+      adjust_inventory_stock: {
+        Args: {
+          p_adjustment_type: string
+          p_inventory_item_id: string
+          p_notes?: string
+          p_quantity_change: number
+          p_reason?: string
+          p_user_id: string
+        }
+        Returns: Json
+      }
       categorize_transaction: {
         Args: { p_amount: number; p_is_credit: boolean; p_narration: string }
         Returns: {
@@ -3841,6 +4380,24 @@ export type Database = {
       create_facade: {
         Args: { p_table_name: string; p_target_schema: string }
         Returns: undefined
+      }
+      create_invoice_with_items: {
+        Args: {
+          p_currency_code?: string
+          p_customer_id?: string
+          p_discount_amount?: number
+          p_due_date?: string
+          p_footer_text?: string
+          p_invoice_date?: string
+          p_items?: Json
+          p_notes?: string
+          p_payment_terms?: string
+          p_shipping_cost?: number
+          p_tax_rate?: number
+          p_terms_and_conditions?: string
+          p_user_id: string
+        }
+        Returns: Json
       }
       find_similar_patterns: {
         Args: {
@@ -4069,6 +4626,18 @@ export type Database = {
           user_id: string
         }[]
       }
+      record_invoice_payment: {
+        Args: {
+          p_amount?: number
+          p_invoice_id: string
+          p_notes?: string
+          p_payment_date?: string
+          p_payment_method?: string
+          p_reference_number?: string
+          p_user_id: string
+        }
+        Returns: Json
+      }
       register_user_with_org: {
         Args: {
           p_email: string
@@ -4132,12 +4701,12 @@ export type Tables<
   DefaultSchemaTableNameOrOptions extends
     | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
         DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -4161,11 +4730,11 @@ export type TablesInsert<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -4186,11 +4755,11 @@ export type TablesUpdate<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -4211,11 +4780,11 @@ export type Enums<
   DefaultSchemaEnumNameOrOptions extends
     | keyof DefaultSchema["Enums"]
     | { schema: keyof DatabaseWithoutInternals },
-  EnumName extends DefaultSchemaEnumNameOrOptions extends {
+  EnumName extends (DefaultSchemaEnumNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaEnumNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -4228,11 +4797,11 @@ export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
     | keyof DefaultSchema["CompositeTypes"]
     | { schema: keyof DatabaseWithoutInternals },
-  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+  CompositeTypeName extends (PublicCompositeTypeNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
-    : never = never,
+    : never) = never,
 > = PublicCompositeTypeNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
