@@ -40,3 +40,11 @@ mcp_config*.sh
 *.njsproj
 *.sln
 *.sw?
+
+# bun-only: block npm/yarn/pnpm lockfiles from being reintroduced
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+.npmrc
+.yarnrc
+.yarnrc.yml
