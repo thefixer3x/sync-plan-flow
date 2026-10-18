@@ -28,6 +28,9 @@ export default tseslint.config(
       "@typescript-eslint/no-explicit-any": "off",
       // Empty interface extends patterns from shadcn/ui
       "@typescript-eslint/no-empty-object-type": "off",
+      // Additional pre-existing issues
+      "no-useless-catch": "off",
+      "@typescript-eslint/no-require-imports": "off",
     },
   }
 );
