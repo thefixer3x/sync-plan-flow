@@ -64,7 +64,7 @@ const FloatingAIChat = () => {
     if (!isListening) {
       // Start voice recognition
       if ('webkitSpeechRecognition' in window) {
-        const recognition = new (window as any).webkitSpeechRecognition();
+        const recognition = new (window as Window & { webkitSpeechRecognition?: new () => SpeechRecognition }).webkitSpeechRecognition!();
         recognition.continuous = false;
         recognition.interimResults = false;
         recognition.lang = 'en-US';
@@ -74,7 +74,7 @@ const FloatingAIChat = () => {
             description: "Speak now, I'm listening!"
           });
         };
-        recognition.onresult = (event: any) => {
+        recognition.onresult = (event: SpeechRecognitionEvent) => {
           const transcript = event.results[0][0].transcript;
           setMessage(transcript);
           setIsListening(false);

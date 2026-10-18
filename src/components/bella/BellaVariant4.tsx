@@ -33,7 +33,7 @@ import {
   Flame
 } from "lucide-react";
 
-const cn = (...inputs: any[]) => {
+const cn = (...inputs: (string | undefined | false | null | "")[]) => {
   return inputs.filter(Boolean).join(' ');
 };
 

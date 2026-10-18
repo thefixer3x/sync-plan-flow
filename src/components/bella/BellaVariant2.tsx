@@ -488,7 +488,7 @@ const BellaAIInterface = () => {
                 )}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                onClick={() => setCurrentMode(id as any)}
+                onClick={() => setCurrentMode(id as string)}
               >
                 <Icon className="w-4 h-4" />
                 <span className="text-sm font-medium">{label}</span>
