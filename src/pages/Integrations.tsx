@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
+import GitHubIntegrationCard from "@/components/GitHubIntegrationCard";
 
 const Integrations = () => {
   const [connections, setConnections] = useState<Record<string, boolean>>({
@@ -57,6 +58,7 @@ const Integrations = () => {
             {integrations
               .filter((i) => i.category === category)
               .map((integration) => {
+                if (integration.id === "github") return <GitHubIntegrationCard key="github" />;
                 const Icon = integration.icon;
                 const connected = connections[integration.id];
                 return (
