@@ -67,7 +67,12 @@ export function IssueBreakdownDialog({ open, onOpenChange, initialTaskId }: Prop
   };
 
   const toggle = (i: number) =>
-    setSelected((prev) => { const n = new Set(prev); n.has(i) ? n.delete(i) : n.add(i); return n; });
+    setSelected((prev) => {
+      const n = new Set(prev);
+      if (n.has(i)) n.delete(i);
+      else n.add(i);
+      return n;
+    });
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
