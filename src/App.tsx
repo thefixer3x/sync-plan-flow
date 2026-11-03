@@ -7,6 +7,9 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AppProvider } from "@/contexts/AppContext";
 import { SidebarProvider } from "@/contexts/SidebarContext";
+import { AuthProvider } from "@/contexts/AuthContext";
+import { ConciergeProvider } from "@/contexts/ConciergeContext";
+import { GithubTokenCapture } from "@/components/GithubTokenCapture";
 import { toast } from "@/hooks/use-toast";
 import { AppSidebar } from "./components/AppSidebar";
 import { SidebarAwareMain } from "./components/SidebarAwareMain";
@@ -37,6 +40,7 @@ const Memory = lazy(() => import("./pages/Memory"));
 const Social = lazy(() => import("./pages/Social"));
 const Focus = lazy(() => import("./pages/Focus"));
 const Activity = lazy(() => import("./pages/Activity"));
+const Auth = lazy(() => import("./pages/Auth"));
 
 const queryClient = new QueryClient();
 
@@ -97,6 +101,9 @@ const App = () => {
           <Toaster />
           <Sonner />
           <BrowserRouter>
+            <AuthProvider>
+            <ConciergeProvider>
+            <GithubTokenCapture />
             <SidebarProvider>
               <OfflineBadge />
               <InstallBanner />
@@ -117,6 +124,7 @@ const App = () => {
                       <Route path="/social" element={<ErrorBoundary><Social /></ErrorBoundary>} />
                       <Route path="/focus" element={<ErrorBoundary><Focus /></ErrorBoundary>} />
                       <Route path="/activity" element={<ErrorBoundary><Activity /></ErrorBoundary>} />
+                      <Route path="/auth" element={<ErrorBoundary><Auth /></ErrorBoundary>} />
                       <Route path="/settings" element={<ErrorBoundary><Settings /></ErrorBoundary>} />
                       <Route path="*" element={<NotFound />} />
                     </Routes>
@@ -125,6 +133,8 @@ const App = () => {
               </div>
               <FloatingAIChat />
             </SidebarProvider>
+            </ConciergeProvider>
+            </AuthProvider>
           </BrowserRouter>
         </TooltipProvider>
       </AppProvider>
