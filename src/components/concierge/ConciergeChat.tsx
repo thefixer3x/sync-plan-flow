@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { Link } from "react-router-dom";
 import { useChat } from "@ai-sdk/react";
 import type { Chat } from "@ai-sdk/react";
@@ -77,10 +77,12 @@ function ChatSurface({ chat, compact }: { chat: Chat<UIMessage>; compact: boolea
   const { toast } = useToast();
   const [input, setInput] = useState("");
   const [listening, setListening] = useState(false);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const inputId = useId();
   const busy = status === "submitted" || status === "streaming";
 
-  useEffect(() => { if (!busy) textareaRef.current?.focus(); }, [busy]);
+  useEffect(() => {
+    if (!busy) (document.getElementById(inputId) as HTMLTextAreaElement | null)?.focus();
+  }, [busy, inputId]);
 
   const send = (text: string) => {
     const t = text.trim();
@@ -119,11 +121,7 @@ function ChatSurface({ chat, compact }: { chat: Chat<UIMessage>; compact: boolea
       <Conversation className="flex-1 min-h-0">
         <ConversationContent className={cn(compact ? "p-3 gap-5" : "p-4 md:p-6")}>
           {messages.length === 0 ? (
-            <ConversationEmptyState
-              icon={<ConciergeMark className="h-14 w-14" />}
-              title="Hey, I'm Flow"
-              description="Tell me what's on your mind — I'll turn it into a plan, keep your board tidy and nudge you toward the next thing."
-            >
+            <ConversationEmptyState>
               <div className="flex flex-col items-center gap-3">
                 <ConciergeMark className="h-14 w-14" />
                 <div className="space-y-1">
@@ -198,7 +196,7 @@ function ChatSurface({ chat, compact }: { chat: Chat<UIMessage>; compact: boolea
       <div className={cn("border-t", compact ? "p-3" : "p-4")}>
         <PromptInput onSubmit={(msg) => send(msg.text ?? input)}>
           <PromptInputTextarea
-            ref={textareaRef}
+            id={inputId}
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder={listening ? "Listening…" : "Ask Flow to plan, add or move anything…"}
