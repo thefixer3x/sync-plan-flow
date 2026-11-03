@@ -1,11 +1,12 @@
 import { 
   Home, MessageSquare, LayoutDashboard, CheckSquare, 
-  Plug, Shield, Palette, Settings, Menu, Bot, Brain, Users, Timer, Waypoints
+  Plug, Shield, Palette, Settings, Menu, Bot, Brain, Users, Timer, Waypoints, LogIn, LogOut
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useSidebarState } from "@/contexts/SidebarContext";
+import { useAuth } from "@/contexts/AuthContext";
 
 const navItems = [
   { path: "/", label: "Home", icon: Home },
@@ -13,7 +14,7 @@ const navItems = [
   { path: "/tasks", label: "Tasks", icon: CheckSquare },
   { path: "/activity", label: "Activity", icon: Waypoints },
   { path: "/focus", label: "Focus Mode", icon: Timer },
-  { path: "/chat", label: "AI Chat", icon: MessageSquare },
+  { path: "/chat", label: "Flow Concierge", icon: MessageSquare },
   { path: "/social", label: "Social", icon: Users },
   { path: "/personalities", label: "AI Personalities", icon: Bot },
   { path: "/memory", label: "Memory", icon: Brain },
@@ -26,6 +27,7 @@ const navItems = [
 export function AppSidebar() {
   const location = useLocation();
   const { collapsed, setCollapsed, mobileOpen, setMobileOpen } = useSidebarState();
+  const { user, signOut } = useAuth();
 
   return (
     <>
@@ -88,6 +90,30 @@ export function AppSidebar() {
             );
           })}
         </nav>
+
+        {/* Account */}
+        <div className="border-t border-border p-2 shrink-0">
+          {user ? (
+            <button
+              onClick={() => void signOut()}
+              title={collapsed ? `Sign out (${user.email ?? "account"})` : undefined}
+              className={cn("w-full flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted-foreground hover:bg-muted hover:text-foreground transition-colors", collapsed && "justify-center px-2")}
+            >
+              <LogOut className="h-4 w-4 shrink-0" />
+              {!collapsed && <span className="truncate">Sign out · {user.user_metadata?.user_name ?? user.email}</span>}
+            </button>
+          ) : (
+            <Link
+              to="/auth"
+              onClick={() => setMobileOpen(false)}
+              title={collapsed ? "Sign in" : undefined}
+              className={cn("flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-primary hover:bg-primary/10 transition-colors", collapsed && "justify-center px-2")}
+            >
+              <LogIn className="h-4 w-4 shrink-0" />
+              {!collapsed && <span>Sign in</span>}
+            </Link>
+          )}
+        </div>
 
         {/* Collapse toggle - desktop only */}
         <div className="hidden md:flex border-t border-border p-2 shrink-0">
