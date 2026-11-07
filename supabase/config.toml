@@ -1,0 +1,9 @@
+project_id = "ptnrwrgzrsbocgxlpvhd"
+[functions.github-connection]
+verify_jwt = false
+
+[functions.issue-subtasks]
+verify_jwt = false
+
+[functions.concierge-chat]
+verify_jwt = false
