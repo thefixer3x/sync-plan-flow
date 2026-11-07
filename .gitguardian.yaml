@@ -1,0 +1,24 @@
+# GitGuardian configuration
+#
+# The Supabase publishable key is public by design (it replaces the legacy
+# anon key, which was always shipped in client bundles) and is protected by
+# Row Level Security. It is read from VITE_SUPABASE_PUBLISHABLE_KEY at build
+# time rather than hardcoded.
+
+version: 2
+
+all-policies:
+  - is-secret:
+      to-detect:
+        - id: supabase-publishable-key
+      paths:
+        - src/integrations/supabase/client.ts
+      message: "The Supabase publishable key belongs in VITE_SUPABASE_PUBLISHABLE_KEY, not in source."
+      is-allowed: false
+  - is-secret:
+      to-detect:
+        - id: supabase-secret-key
+      paths:
+        - src/integrations/supabase/client.ts
+      message: "The Supabase secret key is a server credential and must never reach the browser bundle."
+      is-allowed: false
