@@ -18,7 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Task } from "./TaskCard";
+import type { Task } from "@/store/db";
 
 interface CreateTaskDialogProps {
   open: boolean;
@@ -26,173 +26,180 @@ interface CreateTaskDialogProps {
   onCreateTask: (task: Omit<Task, "id" | "status" | "completedAt">) => void;
 }
 
-const categories = [
-  "Work",
-  "Personal", 
-  "Health",
-  "Learning",
-  "Shopping",
-  "Other"
+const CATEGORIES = ["Work", "Personal", "Health", "Learning", "Finance", "Shopping", "Other"];
+const RECURRENCES = [
+  { value: "none", label: "No recurrence" },
+  { value: "daily", label: "Daily" },
+  { value: "weekly", label: "Weekly" },
+  { value: "monthly", label: "Monthly" },
 ];
 
+const INITIAL = {
+  title: "",
+  description: "",
+  priority: "medium" as Task["priority"],
+  dueDate: "",
+  dueTime: "",
+  category: "Work",
+  estimatedTime: "",
+  recurrence: "none" as Task["recurrence"],
+  tags: "",
+};
+
 export function CreateTaskDialog({ open, onOpenChange, onCreateTask }: CreateTaskDialogProps) {
-  const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    priority: "medium" as Task["priority"],
-    dueDate: "",
-    category: "Work",
-    assignee: "",
-    estimatedTime: ""
-  });
+  const [form, setForm] = useState(INITIAL);
+
+  const set = (field: string, value: string) =>
+    setForm((prev) => ({ ...prev, [field]: value }));
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!formData.title.trim()) return;
+    if (!form.title.trim()) return;
 
-    const newTask: Omit<Task, "id" | "status" | "completedAt"> = {
-      title: formData.title.trim(),
-      description: formData.description.trim() || undefined,
-      priority: formData.priority,
-      dueDate: formData.dueDate || undefined,
-      category: formData.category,
-      assignee: formData.assignee.trim() || undefined,
-      estimatedTime: formData.estimatedTime ? parseInt(formData.estimatedTime) : undefined,
-    };
-
-    onCreateTask(newTask);
-    
-    // Reset form
-    setFormData({
-      title: "",
-      description: "",
-      priority: "medium",
-      dueDate: "",
-      category: "Work",
-      assignee: "",
-      estimatedTime: ""
+    onCreateTask({
+      title: form.title.trim(),
+      description: form.description.trim() || undefined,
+      priority: form.priority,
+      dueDate: form.dueDate || undefined,
+      dueTime: form.dueTime || undefined,
+      category: form.category,
+      estimatedTime: form.estimatedTime ? parseFloat(form.estimatedTime) : undefined,
+      recurrence: form.recurrence || "none",
+      tags: form.tags ? form.tags.split(",").map((t) => t.trim()).filter(Boolean) : [],
+      subTasks: [],
     });
-    
-    onOpenChange(false);
-  };
 
-  const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setForm(INITIAL);
+    onOpenChange(false);
   };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[600px]">
+      <DialogContent className="sm:max-w-[560px]">
         <DialogHeader>
-          <DialogTitle className="text-xl font-semibold bg-gradient-primary bg-clip-text text-transparent">
-            Create New Task
-          </DialogTitle>
+          <DialogTitle>New Task</DialogTitle>
           <DialogDescription>
-            Add a new task to your workflow. Fill in the details to get started.
+            Fill in the details — or use quick-add with natural language.
           </DialogDescription>
         </DialogHeader>
-        
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="md:col-span-2 space-y-2">
-              <Label htmlFor="title">Task Title *</Label>
-              <Input
-                id="title"
-                value={formData.title}
-                onChange={(e) => handleInputChange("title", e.target.value)}
-                placeholder="What needs to be done?"
-                className="text-base"
-                required
-              />
-            </div>
-            
-            <div className="md:col-span-2 space-y-2">
-              <Label htmlFor="description">Description</Label>
-              <Textarea
-                id="description"
-                value={formData.description}
-                onChange={(e) => handleInputChange("description", e.target.value)}
-                placeholder="Add more details about this task..."
-                rows={3}
-                className="resize-none"
-              />
-            </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="priority">Priority</Label>
-              <Select 
-                value={formData.priority} 
-                onValueChange={(value) => handleInputChange("priority", value)}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Title */}
+          <div className="space-y-1.5">
+            <Label htmlFor="title">Title *</Label>
+            <Input
+              id="title"
+              autoFocus
+              value={form.title}
+              onChange={(e) => set("title", e.target.value)}
+              placeholder="What needs to be done?"
+              required
+            />
+          </div>
+
+          {/* Description */}
+          <div className="space-y-1.5">
+            <Label htmlFor="desc">Description</Label>
+            <Textarea
+              id="desc"
+              value={form.description}
+              onChange={(e) => set("description", e.target.value)}
+              placeholder="Optional details…"
+              rows={2}
+              className="resize-none"
+            />
+          </div>
+
+          {/* Row: priority + category */}
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1.5">
+              <Label>Priority</Label>
+              <Select value={form.priority} onValueChange={(v) => set("priority", v)}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="low">Low Priority</SelectItem>
-                  <SelectItem value="medium">Medium Priority</SelectItem>
-                  <SelectItem value="high">High Priority</SelectItem>
+                  <SelectItem value="low">Low</SelectItem>
+                  <SelectItem value="medium">Medium</SelectItem>
+                  <SelectItem value="high">High</SelectItem>
                 </SelectContent>
               </Select>
             </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="category">Category</Label>
-              <Select 
-                value={formData.category} 
-                onValueChange={(value) => handleInputChange("category", value)}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
+            <div className="space-y-1.5">
+              <Label>Category</Label>
+              <Select value={form.category} onValueChange={(v) => set("category", v)}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  {categories.map((category) => (
-                    <SelectItem key={category} value={category}>
-                      {category}
-                    </SelectItem>
-                  ))}
+                  {CATEGORIES.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
                 </SelectContent>
               </Select>
             </div>
-            
-            <div className="space-y-2">
+          </div>
+
+          {/* Row: due date + due time */}
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1.5">
               <Label htmlFor="dueDate">Due Date</Label>
               <Input
                 id="dueDate"
                 type="date"
-                value={formData.dueDate}
-                onChange={(e) => handleInputChange("dueDate", e.target.value)}
-                min={new Date().toISOString().split('T')[0]}
+                value={form.dueDate}
+                onChange={(e) => set("dueDate", e.target.value)}
+                min={new Date().toISOString().split("T")[0]}
               />
             </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="estimatedTime">Estimated Hours</Label>
+            <div className="space-y-1.5">
+              <Label htmlFor="dueTime">Due Time</Label>
               <Input
-                id="estimatedTime"
-                type="number"
-                value={formData.estimatedTime}
-                onChange={(e) => handleInputChange("estimatedTime", e.target.value)}
-                placeholder="2"
-                min="0.5"
-                step="0.5"
+                id="dueTime"
+                type="time"
+                value={form.dueTime}
+                onChange={(e) => set("dueTime", e.target.value)}
               />
             </div>
           </div>
 
-          <DialogFooter className="gap-2">
-            <Button 
-              type="button" 
-              variant="outline" 
-              onClick={() => onOpenChange(false)}
-            >
+          {/* Row: estimated hours + recurrence */}
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1.5">
+              <Label htmlFor="est">Estimated Hours</Label>
+              <Input
+                id="est"
+                type="number"
+                value={form.estimatedTime}
+                onChange={(e) => set("estimatedTime", e.target.value)}
+                placeholder="1.5"
+                min="0.25"
+                step="0.25"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label>Recurrence</Label>
+              <Select value={form.recurrence} onValueChange={(v) => set("recurrence", v)}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  {RECURRENCES.map((r) => (
+                    <SelectItem key={r.value} value={r.value}>{r.label}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          {/* Tags */}
+          <div className="space-y-1.5">
+            <Label htmlFor="tags">Tags (comma-separated)</Label>
+            <Input
+              id="tags"
+              value={form.tags}
+              onChange={(e) => set("tags", e.target.value)}
+              placeholder="finance, urgent, q1"
+            />
+          </div>
+
+          <DialogFooter className="gap-2 pt-2">
+            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
               Cancel
             </Button>
-            <Button 
-              type="submit" 
-              variant="hero"
-              disabled={!formData.title.trim()}
-            >
+            <Button type="submit" disabled={!form.title.trim()}>
               Create Task
             </Button>
           </DialogFooter>

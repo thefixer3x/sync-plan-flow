@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
@@ -29,6 +30,8 @@ const buttonVariants = cva(
         lg: "h-12 rounded-lg px-8 text-base",
         icon: "h-10 w-10",
         xs: "h-6 px-2 text-xs rounded",
+        "icon-sm": "h-8 w-8",
+        "icon-xs": "h-6 w-6 rounded",
       },
     },
     defaultVariants: {
