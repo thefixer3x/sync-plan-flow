@@ -7,18 +7,18 @@
 
 version: 2
 
-all-policies:
-  - is-secret:
-      to-detect:
+all_policies:
+  - is_secret:
+      to_detect:
         - id: supabase-publishable-key
       paths:
         - src/integrations/supabase/client.ts
       message: "The Supabase publishable key belongs in VITE_SUPABASE_PUBLISHABLE_KEY, not in source."
-      is-allowed: false
-  - is-secret:
-      to-detect:
+      is_allowed: false
+  - is_secret:
+      to_detect:
         - id: supabase-secret-key
       paths:
         - src/integrations/supabase/client.ts
       message: "The Supabase secret key is a server credential and must never reach the browser bundle."
-      is-allowed: false
+      is_allowed: false
